@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Byrrgis — Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Portfolio-specific styles ─── */
+    .portfolio-hero {
+      padding: 8px 12px 20px;
+      text-align: center;
+    }
+    .portfolio-hero__label {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .portfolio-hero__value {
+      font-family: var(--font-mono);
+      font-size: 40px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .portfolio-hero__pnl-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pnl-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: var(--r-full);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .pnl-chip.pos { background: var(--color-teal-dim); color: var(--color-teal); }
+    .pnl-chip.neg { background: var(--color-red-dim); color: var(--color-red); }
+    .pnl-chip__label { font-size: 10px; font-weight: 400; color: inherit; opacity: 0.7; }
+
+    /* Allocation bar */
+    .alloc-section {
+      padding: 0 12px 20px;
+    }
+    .alloc-bar {
+      display: flex;
+      height: 6px;
+      border-radius: var(--r-full);
+      overflow: hidden;
+      gap: 2px;
+      margin-bottom: 12px;
+    }
+    .alloc-bar__seg {
+      border-radius: var(--r-full);
+      flex-shrink: 0;
+    }
+    .alloc-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+    }
+    .alloc-legend__item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .alloc-legend__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--r-full);
+      flex-shrink: 0;
+    }
+    .alloc-legend__pct {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-primary);
+    }
+
+    /* Summary strip */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--color-border);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 20px;
+    }
+    .summary-cell {
+      background: var(--color-bg);
+      padding: 12px 14px;
+      text-align: center;
+    }
+    .summary-cell__label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .summary-cell__value {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .summary-cell__value.pos { color: var(--color-teal); }
+    .summary-cell__value.neg { color: var(--color-red); }
+
+    /* Holdings section */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 10px;
+    }
+    .section-header__title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .section-header__action {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-teal);
+      background: none;
+      border: none;
+    }
+
+    /* Holding row */
+    .holding-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .holding-row:active { background: var(--color-surface-2); }
+
+    .holding-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .holding-chain-badge {
+      position: absolute;
+      bottom: -1px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      border-radius: var(--r-full);
+      background: #fff;
+      border: 1.5px solid var(--color-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .holding-info { flex: 1; min-width: 0; }
+    .holding-info__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .holding-info__name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .holding-info__value {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .holding-info__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .holding-info__sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .holding-info__pnl {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .holding-info__pnl.pos { color: var(--color-teal); }
+    .holding-info__pnl.neg { color: var(--color-red); }
+
+    /* Alloc bar inline */
+    .holding-alloc-bar {
+      height: 2px;
+      background: var(--color-surface-3);
+      border-radius: 1px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    .holding-alloc-bar__fill {
+      height: 100%;
+      border-radius: 1px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .empty-state__icon {
+      width: 56px;
+      height: 56px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--r-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--text-muted);
+    }
+    .empty-state__title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .empty-state__sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+      padding: 0 20px;
+      background: var(--color-teal-dim);
+      border: 1px solid rgba(26,188,163,0.3);
+      border-radius: var(--r-full);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-teal);
+    }
+
+    /* Period selector */
+    .period-bar {
+      display: flex;
+      gap: 4px;
+      padding: 0 12px 16px;
+    }
+    .period-btn {
+      flex: 1;
+      height: 30px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--r-full);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .period-btn.active {
+      background: var(--color-surface-3);
+      border-color: var(--color-border);
+      color: var(--text-primary);
+    }
+
+    /* Mini sparkline in row */
+    .holding-spark { flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── Status Bar ─────────────────────────────────────────── -->
+  <div class="status-bar">
+    <span class="status-bar__time">9:41</span>
+    <div class="status-bar__icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor">
+        <rect x="0" y="8" width="3" height="4" rx="0.5" opacity="0.4"/>
+        <rect x="4.5" y="5" width="3" height="7" rx="0.5" opacity="0.4"/>
+        <rect x="9" y="2" width="3" height="10" rx="0.5"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="0.5"/>
+      </svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M1 4.5C3.8 1.8 12.2 1.8 15 4.5" opacity="0.4"/>
+        <path d="M3.5 7C5.1 5.4 10.9 5.4 12.5 7" opacity="0.7"/>
+        <path d="M6 9.5C6.9 8.6 9.1 8.6 10 9.5"/>
+        <circle cx="8" cy="12" r="0.8" fill="currentColor" stroke="none"/>
+      </svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/>
+        <rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="currentColor" fill-opacity="0.4"/>
+        <rect x="2" y="2" width="17" height="8" rx="1.5" fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── Scrollable Content ─────────────────────────────────── -->
+  <div class="scroll-area">
+
+    <!-- Header -->
+    <div class="page-header">
+      <h1 class="page-title">Portfolio</h1>
+      <button class="search-icon-btn" aria-label="Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero value -->
+    <div class="portfolio-hero">
+      <div class="portfolio-hero__label">Total Value</div>
+      <div class="portfolio-hero__value">$24,831.40</div>
+      <div class="portfolio-hero__pnl-row">
+        <div class="pnl-chip pos">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>
+          +$412.18
+          <span class="pnl-chip__label">24H</span>
+        </div>
+        <div class="pnl-chip pos">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>
+          +$3,241.60
+          <span class="pnl-chip__label">ALL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Period selector -->
+    <div class="period-bar">
+      <button class="period-btn">1H</button>
+      <button class="period-btn active">24H</button>
+      <button class="period-btn">7D</button>
+      <button class="period-btn">30D</button>
+      <button class="period-btn">ALL</button>
+    </div>
+
+    <!-- Summary strip -->
+    <div class="summary-strip">
+      <div class="summary-cell">
+        <div class="summary-cell__label">Invested</div>
+        <div class="summary-cell__value">$21,589.80</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-cell__label">Realized P&L</div>
+        <div class="summary-cell__value pos">+$892.40</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-cell__label">Unrealized</div>
+        <div class="summary-cell__value pos">+$2,349.20</div>
+      </div>
+    </div>
+
+    <!-- Allocation bar -->
+    <div class="alloc-section">
+      <div class="alloc-bar" id="allocBar"></div>
+      <div class="alloc-legend" id="allocLegend"></div>
+    </div>
+
+    <!-- Holdings -->
+    <div class="section-header">
+      <span class="section-header__title">Holdings</span>
+      <button class="section-header__action">+ Add</button>
+    </div>
+
+    <div id="holdingsList"></div>
+
+  </div><!-- /scroll-area -->
+
+  <!-- ── Tab Bar ─────────────────────────────────────────────── -->
+  <nav class="tab-bar">
+    <button class="tab-item" onclick="window.location='index.html'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 6v2M12 16v2M9 9.27C9 8.02 10.34 7 12 7s3 1.02 3 2.27c0 2.73-6 2.27-6 5.46C9 16.03 10.34 17 12 17s3-1.02 3-2.27"/>
+      </svg>
+      <span class="tab-item__label">Coins</span>
+    </button>
+    <button class="tab-item" onclick="window.location='packs.html'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <rect x="5" y="6" width="14" height="8" rx="1"/>
+        <path d="M2 20h20M6 20v-3M18 20v-3"/>
+      </svg>
+      <span class="tab-item__label">Packs</span>
+    </button>
+    <button class="tab-item active">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3v18h18"/>
+        <path d="M7 16l4-4 4 4 4-7"/>
+      </svg>
+      <span class="tab-item__label">Portfolio</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+  const holdings = [
+    {
+      id: 'aave', name: 'Aave', symbol: 'AAVE', chain: 'Ethereum',
+      qty: '8.42', value: 14325.60, costBasis: 12100.00,
+      price: '$169.42', change: '+2.14%', pos: true,
+      trend: 'up', avatarBg: '#B6509E', initial: 'A',
+      alloc: 57.7, allocColor: '#B6509E',
+    },
+    {
+      id: 'bonk', name: 'Bonk', symbol: 'BONK', chain: 'Solana',
+      qty: '312,500,000', value: 4437.50, costBasis: 3200.00,
+      price: '$0.0000142', change: '+5.82%', pos: true,
+      trend: 'up', avatarBg: '#D4620A', initial: 'B',
+      alloc: 17.9, allocColor: '#D4620A',
+    },
+    {
+      id: 'ray', name: 'Raydium', symbol: 'RAY', chain: 'Solana',
+      qty: '1,204.50', value: 3480.80, costBasis: 3900.00,
+      price: '$2.89', change: '+1.45%', pos: true,
+      trend: 'up', avatarBg: '#4E44CE', initial: 'R',
+      alloc: 14.0, allocColor: '#4E44CE',
+    },
+    {
+      id: 'uni', name: 'Uniswap', symbol: 'UNI', chain: 'Ethereum',
+      qty: '444.30', value: 2585.50, costBasis: 2890.00,
+      price: '$5.82', change: '-1.23%', pos: false,
+      trend: 'down', avatarBg: '#FF007A', initial: '🦄', emoji: true,
+      alloc: 10.4, allocColor: '#FF007A',
+    },
+  ];
+
+  const CHAIN_ICON = {
+    Solana:   `<svg width="10" height="10" viewBox="0 0 128 128" fill="none"><path d="M24 88h80l-16 16H8l16-16zm0-32h80L88 72H8l16-16zm64-32H8L24 8h80L88 24z" fill="#9945FF"/></svg>`,
+    Ethereum: `<svg width="10" height="10" viewBox="0 0 128 128" fill="none"><path d="M64 8l-40 56 40 24 40-24L64 8z" fill="#627EEA" opacity=".6"/><path d="M24 64l40 56 40-56-40 24L24 64z" fill="#627EEA"/></svg>`
+  };
+
+  function sparkPath(trend) {
+    if (trend === 'up')   return 'M2,28 L8,24 L16,20 L22,15 L30,18 L38,12 L46,8 L54,10 L62,6 L70,4';
+    if (trend === 'down') return 'M2,4 L10,8 L18,6 L26,12 L34,18 L40,15 L48,22 L56,26 L64,24 L70,28';
+    return 'M2,16 L12,14 L22,18 L32,15 L42,17 L52,14 L62,16 L70,15';
+  }
+
+  function fmtPnl(value, cost) {
+    const diff = value - cost;
+    const pct  = ((diff / cost) * 100).toFixed(1);
+    const sign = diff >= 0 ? '+' : '';
+    return { str: `${sign}$${Math.abs(diff).toFixed(0)} (${sign}${pct}%)`, pos: diff >= 0 };
+  }
+
+  // Render alloc bar
+  const allocBar    = document.getElementById('allocBar');
+  const allocLegend = document.getElementById('allocLegend');
+  holdings.forEach(h => {
+    const seg = document.createElement('div');
+    seg.className = 'alloc-bar__seg';
+    seg.style.width = h.alloc + '%';
+    seg.style.background = h.allocColor;
+    allocBar.appendChild(seg);
+
+    allocLegend.innerHTML += `
+      <div class="alloc-legend__item">
+        <div class="alloc-legend__dot" style="background:${h.allocColor}"></div>
+        ${h.symbol}
+        <span class="alloc-legend__pct">${h.alloc}%</span>
+      </div>`;
+  });
+
+  // Render holdings
+  const list = document.getElementById('holdingsList');
+  list.innerHTML = holdings.map(h => {
+    const pnl       = fmtPnl(h.value, h.costBasis);
+    const spColor   = h.pos ? 'var(--color-teal)' : 'var(--color-red)';
+    const emojiStyle = h.emoji ? 'font-size:17px;' : '';
+    const chainIcon  = CHAIN_ICON[h.chain] || '';
+
+    return `
+      <div class="holding-row" onclick="window.location='coin-detail.html'">
+        <div class="holding-avatar" style="background:${h.avatarBg};${emojiStyle}">
+          ${h.initial}
+          <div class="holding-chain-badge">${chainIcon}</div>
+        </div>
+        <div class="holding-info">
+          <div class="holding-info__top">
+            <span class="holding-info__name">${h.name}</span>
+            <span class="holding-info__value">$${h.value.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</span>
+          </div>
+          <div class="holding-info__bottom">
+            <span class="holding-info__sub">${h.qty} ${h.symbol}</span>
+            <span class="holding-info__pnl ${pnl.pos ? 'pos' : 'neg'}">${pnl.str}</span>
+          </div>
+          <div class="holding-alloc-bar">
+            <div class="holding-alloc-bar__fill" style="width:${h.alloc}%;background:${h.allocColor};opacity:0.6"></div>
+          </div>
+        </div>
+        <div class="holding-spark">
+          <svg width="56" height="28" viewBox="0 0 72 32" fill="none">
+            <path d="${sparkPath(h.trend)}" stroke="${spColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Period tab
+  document.querySelectorAll('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
