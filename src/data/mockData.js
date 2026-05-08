@@ -1,0 +1,412 @@
+
+export const coins = [
+  {
+    id: 'aave', name: 'Aave', symbol: 'AAVE', chain: 'Ethereum', age: '4y',
+    score: 87,
+    price: '$169.42', change: '+2.14%', pos: true,
+    mcap: '$2.5B',
+    liq: '$35.9M', liqLocked: true,
+    holders: '124K', holdersChange: '+1.2%', holdersPos: true,
+    vol: '$48.2M', volChange: '+18.4%', volPos: true,
+    buyPct: 62, buys: '1.2K', sells: '740',
+    trend: 'up',
+    avatarBg: '#B6509E', initial: 'A',
+  },
+  {
+    id: 'usdt', name: 'Tether USD', symbol: 'USDT', chain: 'Ethereum', age: '6y',
+    score: 91,
+    price: '$1.001', change: '+0.01%', pos: true,
+    mcap: '$144.5B',
+    liq: '$15.4B', liqLocked: true,
+    holders: '6.2M', holdersChange: '+0.4%', holdersPos: true,
+    vol: '$82.1B', volChange: '+3.2%', volPos: true,
+    buyPct: 54, buys: '4.1M', sells: '3.5M',
+    trend: 'flat',
+    avatarBg: '#26A17B', initial: 'U',
+  },
+  {
+    id: 'uni', name: 'Uniswap', symbol: 'UNI', chain: 'Ethereum', age: '4y',
+    score: 74,
+    price: '$5.82', change: '-1.23%', pos: false,
+    mcap: '$4.4B',
+    liq: '$111.0M', liqLocked: false,
+    holders: '312K', holdersChange: '-0.3%', holdersPos: false,
+    vol: '$94.5M', volChange: '-7.8%', volPos: false,
+    buyPct: 44, buys: '8.3K', sells: '10.6K',
+    trend: 'down',
+    avatarBg: '#FF007A', initial: '🦄', emoji: true,
+  },
+  {
+    id: 'trump', name: 'OFFICIAL TRUMP', symbol: 'TRUMP', chain: 'Solana', age: '5mo',
+    score: 58,
+    price: '$3.90', change: '-3.00%', pos: false,
+    mcap: '$3.9B',
+    liq: '$94.8M', liqLocked: false,
+    holders: '892K', holdersChange: '-1.1%', holdersPos: false,
+    vol: '$210.4M', volChange: '-22.3%', volPos: false,
+    buyPct: 39, buys: '18.2K', sells: '28.5K',
+    trend: 'down',
+    avatarBg: '#B8860B', initial: 'T',
+  },
+  {
+    id: 'bonk', name: 'Bonk', symbol: 'BONK', chain: 'Solana', age: '2y',
+    score: 69,
+    price: '$0.0000142', change: '+5.82%', pos: true,
+    mcap: '$1.0B',
+    liq: '$45.2M', liqLocked: true,
+    holders: '2.1M', holdersChange: '+2.8%', holdersPos: true,
+    vol: '$128.7M', volChange: '+41.2%', volPos: true,
+    buyPct: 71, buys: '54.3K', sells: '22.1K',
+    trend: 'up',
+    avatarBg: '#D4620A', initial: 'B',
+  },
+  {
+    id: 'ray', name: 'Raydium', symbol: 'RAY', chain: 'Solana', age: '3y',
+    score: 78,
+    price: '$2.89', change: '+1.45%', pos: true,
+    mcap: '$733.2M',
+    liq: '$18.6M', liqLocked: true,
+    holders: '187K', holdersChange: '+0.9%', holdersPos: true,
+    vol: '$31.4M', volChange: '+12.7%', volPos: true,
+    buyPct: 58, buys: '6.7K', sells: '4.9K',
+    trend: 'up',
+    avatarBg: '#4E44CE', initial: 'R',
+  },
+  {
+    id: 'wwl', name: 'WhiteWhale', symbol: 'WWL', chain: 'Solana', age: '1y',
+    score: 42,
+    price: '$0.0379', change: '-6.37%', pos: false,
+    mcap: '$36.0M',
+    liq: '$0', liqLocked: false,
+    holders: '11.4K', holdersChange: '-2.1%', holdersPos: false,
+    vol: '$1.2M', volChange: '-34.6%', volPos: false,
+    buyPct: 31, buys: '312', sells: '694',
+    trend: 'down',
+    avatarBg: '#2E4A6A', initial: 'W',
+  },
+]
+
+export const newListings = [
+  {
+    id: 'chainlink', name: 'Chainlink', symbol: 'LINK', chain: 'Solana', age: '4y',
+    avatarBg: '#2A5ADA', initial: 'C',
+    audit: 95, fees: 1.9, markets: 16,
+    insider: 88, bundled: 0, honeypot: 0, concentration: 0,
+    vol: '$12.02B', mcap: '$580K',
+    floorPrice: '1.566', txCount: 1328,
+    buyPct: 86,
+  },
+  {
+    id: 'solpill', name: 'SolPill', symbol: 'PILL', chain: 'Solana', age: '2mo',
+    avatarBg: '#1A8C72', initial: 'S',
+    audit: 78, fees: 2.4, markets: 8,
+    insider: 42, bundled: 3, honeypot: 0, concentration: 12,
+    vol: '$840K', mcap: '$2.1M',
+    floorPrice: '0.042', txCount: 412,
+    buyPct: 61,
+  },
+  {
+    id: 'degen', name: 'DegenApe', symbol: 'DAPE', chain: 'Solana', age: '3mo',
+    avatarBg: '#7C3AED', initial: 'D',
+    audit: 62, fees: 3.0, markets: 5,
+    insider: 71, bundled: 0, honeypot: 0, concentration: 8,
+    vol: '$320K', mcap: '$890K',
+    floorPrice: '0.008', txCount: 189,
+    buyPct: 55,
+  },
+  {
+    id: 'mooncat', name: 'MoonCat', symbol: 'MCAT', chain: 'Solana', age: '1mo',
+    avatarBg: '#D97706', initial: 'M',
+    audit: 88, fees: 1.5, markets: 11,
+    insider: 33, bundled: 0, honeypot: 0, concentration: 5,
+    vol: '$4.2M', mcap: '$18.7M',
+    floorPrice: '0.215', txCount: 876,
+    buyPct: 73,
+  },
+]
+
+export const holdings = [
+  {
+    id: 'aave', name: 'Aave', symbol: 'AAVE', chain: 'Ethereum',
+    qty: '8.42', value: 14325.60, costBasis: 12100.00,
+    price: '$169.42', change: '+2.14%', pos: true,
+    trend: 'up', avatarBg: '#B6509E', initial: 'A',
+    alloc: 57.7, allocColor: '#B6509E',
+  },
+  {
+    id: 'bonk', name: 'Bonk', symbol: 'BONK', chain: 'Solana',
+    qty: '312,500,000', value: 4437.50, costBasis: 3200.00,
+    price: '$0.0000142', change: '+5.82%', pos: true,
+    trend: 'up', avatarBg: '#D4620A', initial: 'B',
+    alloc: 17.9, allocColor: '#D4620A',
+  },
+  {
+    id: 'ray', name: 'Raydium', symbol: 'RAY', chain: 'Solana',
+    qty: '1,204.50', value: 3480.80, costBasis: 3900.00,
+    price: '$2.89', change: '+1.45%', pos: true,
+    trend: 'up', avatarBg: '#4E44CE', initial: 'R',
+    alloc: 14.0, allocColor: '#4E44CE',
+  },
+  {
+    id: 'uni', name: 'Uniswap', symbol: 'UNI', chain: 'Ethereum',
+    qty: '444.30', value: 2585.50, costBasis: 2890.00,
+    price: '$5.82', change: '-1.23%', pos: false,
+    trend: 'down', avatarBg: '#FF007A', initial: '🦄', emoji: true,
+    alloc: 10.4, allocColor: '#FF007A',
+  },
+]
+
+export const aaveDetail = {
+  id: 'aave',
+  symbol: 'AAVE',
+  name: 'Aave',
+  chain: 'ETH',
+  age: '4y',
+  price: '$169.42',
+  change: '+2.14%',
+  changeDollar: '$2.99 (23,33%)',
+  pos: true,
+  avatarBg: '#B6509E',
+  initial: 'A',
+  // Header stats
+  liq: '$94.0M',
+  mcap: '$2.50B',
+  holders: '857K',
+  vol: '$210M',
+  volChange: '-8,1%',
+  volPos: false,
+  // Risk score
+  riskScore: 85,
+  riskLabel: 'High',
+  // Token info sheet
+  supply: '1B',
+  liqLockPct: '10.5%',
+  activeTx: '2,253',
+  uniqueTx: '1,840',
+  buys24h: 1240,
+  buysVol: '$90M',
+  sells24h: 1100,
+  sellsVol: '$120M',
+  netVol: '-$30M',
+  techScore: 85,
+  socialScore: 82,
+  top10H: '1.9%',
+  devH: 'DS',
+  snipersH: '0%',
+  insidersH: '0%',
+  bundlersH: '0%',
+  smart: '0%',
+  devMigrated: 10,
+  devHistory: 3,
+  // Transactions sub-tab counts
+  topHoldersCount: '857K',
+  topTradersCount: 48,
+  liquidityPoolCount: 6,
+  devTokensCount: 3,
+  stats: [
+    { label: 'MC',        value: '$2.50B' },
+    { label: 'Vol 24h',   value: '$48.2M' },
+    { label: 'Liq',       value: '$35.9M' },
+    { label: 'Holders',   value: '124K' },
+    { label: 'Score',     value: '87', pos: true },
+    { label: 'Buys/Sells', value: '1.2K / 740' },
+  ],
+  ohlc: { O: '169.1', H: '172.8', L: '163.1', C: '169.4', chg: '-1.1%', neg: true },
+  candles: [
+    [10,  148, 160, 175, 184, false],
+    [28,  140, 148, 162, 170, true],
+    [46,  134, 142, 155, 162, false],
+    [64,  132, 140, 152, 160, true],
+    [82,  128, 138, 150, 157, false],
+    [100, 122, 130, 143, 152, true],
+    [118, 115, 124, 136, 144, true],
+    [136, 108, 118, 130, 138, true],
+    [154, 100, 110, 124, 132, false],
+    [172, 98,  106, 120, 128, true],
+    [190, 88,  96,  110, 118, false],
+    [208, 80,  88,  102, 110, true],
+    [226, 72,  80,  94,  102, false],
+    [244, 64,  72,  86,  94,  false],
+    [262, 56,  64,  78,  86,  false],
+    [280, 48,  58,  72,  80,  true],
+    [298, 44,  52,  66,  74,  false],
+    [316, 40,  48,  62,  70,  false],
+  ],
+  buys: 1240,
+  sells: 740,
+  transactions: [
+    { type: 'buy',  date: '05/07 08:32', usd: '$1.48K',   amount: '8.85 AAVE',  price: '$169.42', platform: 'Balancer', maker: '0xFD…9a2C', remainingUsd: '$106.578', explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'sell', date: '05/07 08:15', usd: '$306.64',  amount: '1.81 AAVE',  price: '$169.30', platform: 'Uniswap',  maker: '0xf2…14f8', remainingUsd: '-',        explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'buy',  date: '05/07 07:58', usd: '$70.87',   amount: '0.42 AAVE',  price: '$168.74', platform: 'Uniswap',  maker: '0x99…e5c2', remainingUsd: '$12.450',  explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'buy',  date: '05/07 07:41', usd: '$149.39',  amount: '0.88 AAVE',  price: '$168.92', platform: 'Balancer', maker: '0xF2…5cE9', remainingUsd: '$28.910',  explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'sell', date: '05/07 07:30', usd: '$0.35',    amount: '0.002 AAVE', price: '$169.05', platform: 'Uniswap',  maker: '0xF6…76A1', remainingUsd: '-',        explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'buy',  date: '05/07 07:18', usd: '$34.18',   amount: '0.20 AAVE',  price: '$168.80', platform: 'Uniswap',  maker: '0xA3…9D12', remainingUsd: '$5.320',   explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'sell', date: '05/07 06:55', usd: '$892.10',  amount: '5.26 AAVE',  price: '$169.50', platform: 'Balancer', maker: '0x3B…cA21', remainingUsd: '-',        explorerLabel: 'Etherscan', explorerUrl: '#' },
+    { type: 'buy',  date: '05/07 06:22', usd: '$2.10K',   amount: '12.41 AAVE', price: '$169.21', platform: 'Uniswap',  maker: '0x9F…4412', remainingUsd: '$380.100', explorerLabel: 'Etherscan', explorerUrl: '#' },
+  ],
+}
+
+export const portfolioStats = {
+  totalValue: '$3,509.99',
+  invested: '$3,200.12',
+  unrealisedPnl: '+$309.12',
+  unrealisedPnlPct: '+10.2%',
+  unrealisedPos: true,
+  realisedPnl: '+$309.12',
+  realisedPnlPct: '+10.2%',
+  realisedPos: true,
+  totalGain: '+$7,346',
+  totalGainPct: '+7.56%',
+  totalGainPos: true,
+  totalGainPeriod: 'last 3M',
+  activeTriggers: 4,
+  tpCount: 2,
+  slCount: 2,
+}
+
+export const packMiniCoins = [
+  { name: 'BTC / Solana', score: 85, bg: '#F7931A', init: '₿', chain: 'Solana', val: '$450.22', chg: '+0.05%', pos: true },
+  { name: 'LTC / Solana', score: 85, bg: '#345D9D', init: 'Ł', chain: 'Solana', val: '$450.22', chg: '-0.05%', pos: false },
+  { name: 'ADA / Solana', score: 62, bg: '#0D1E2D', init: 'A', chain: 'Solana', val: '$450.22', chg: '+0.05%', pos: true },
+  { name: 'DOT / Solana', score: 31, bg: '#2D2D6B', init: 'D', chain: 'Solana', val: '$450.22', chg: '-0.05%', pos: false },
+]
+
+export const portfolioPacks = [
+  { id: 'astroverse', name: 'Astroverse', emoji: '🌌', sub: 'Pack · 6 coins', coinCount: 6, score: 85, tpsl: true, val: '$1,820.44', chg: '+1.14%', pos: true, symbol: 'PACK',
+    stats: { cur: '$1,820.44', inv: '$1,800.00', pnl: '+$20.44', pnlPct: '+1.14%', pnlPos: true } },
+  { id: 'apex', name: 'Apex Digital', emoji: '🔴', sub: 'Pack · 3 coins', coinCount: 3, score: 85, tpsl: false, val: '$450.22', chg: '+0.05%', pos: true, symbol: 'PACK',
+    stats: { cur: '$450.22', inv: '$450.00', pnl: '+$0.22', pnlPct: '+0.05%', pnlPos: true } },
+  { id: 'neon', name: 'Neon Traders', emoji: '💡', sub: 'Pack · 5 coins', coinCount: 5, score: 79, tpsl: true, val: '$312.80', chg: '+1.20%', pos: true, symbol: 'PACK',
+    stats: { cur: '$312.80', inv: '$300.00', pnl: '+$12.80', pnlPct: '+4.27%', pnlPos: true } },
+  { id: 'defi-blue', name: 'DeFi Blue', emoji: '💎', sub: 'Pack · 4 coins', coinCount: 4, score: 88, tpsl: false, val: '$920.00', chg: '+3.10%', pos: true, symbol: 'PACK',
+    stats: { cur: '$920.00', inv: '$900.00', pnl: '+$20.00', pnlPct: '+2.22%', pnlPos: true } },
+  { id: 'astrov2', name: 'Astroverse v2', emoji: '🌌', sub: 'Pack · 6 coins', coinCount: 6, score: 62, tpsl: false, val: '$440.10', chg: '-0.05%', pos: false, symbol: 'PACK',
+    stats: { cur: '$440.10', inv: '$450.00', pnl: '-$9.90', pnlPct: '-2.20%', pnlPos: false } },
+]
+
+export const portfolioCoins = [
+  { id: 'btc-p', name: 'BTC / Solana', sub: 'Bitcoin · 15 tokens', score: 85, tpsl: true, bg: '#F7931A', init: '₿', chain: 'Solana', symbol: 'BTC', val: '$450.00', chg: '+0.05%', pos: true,
+    stats: { cur: '$450.22', inv: '$450.00', pnl: '+$0.22', pnlPct: '+0.05%', pnlPos: true } },
+  { id: 'ltc-p', name: 'LTC / Solana', sub: 'Litecoin · 9 tokens', score: 85, tpsl: false, bg: '#345D9D', init: 'Ł', chain: 'Solana', symbol: 'LTC', val: '$450.00', chg: '-0.05%', pos: false,
+    stats: { cur: '$449.78', inv: '$450.00', pnl: '-$0.22', pnlPct: '-0.05%', pnlPos: false } },
+  { id: 'ada-p', name: 'ADA / Solana', sub: 'Cardano · 12 tokens', score: 62, tpsl: false, bg: '#0D1E2D', init: 'A', chain: 'Solana', symbol: 'ADA', val: '$450.00', chg: '+0.05%', pos: true,
+    stats: { cur: '$450.22', inv: '$450.00', pnl: '+$0.22', pnlPct: '+0.05%', pnlPos: true } },
+  { id: 'link-p', name: 'LINK / Ethereum', sub: 'Chainlink · 4 tokens', score: 85, tpsl: true, bg: '#2A5ADA', init: '⬡', chain: 'Ethereum', symbol: 'LINK', val: '$309.87', chg: '+2.12%', pos: true,
+    stats: { cur: '$309.87', inv: '$290.00', pnl: '+$19.87', pnlPct: '+6.85%', pnlPos: true } },
+  { id: 'aave-p', name: 'AAVE / Ethereum', sub: 'Aave · 7 tokens', score: 87, tpsl: false, bg: '#B6509E', init: 'A', chain: 'Ethereum', symbol: 'AAVE', val: '$169.42', chg: '+2.14%', pos: true,
+    stats: { cur: '$169.42', inv: '$160.00', pnl: '+$9.42', pnlPct: '+5.89%', pnlPos: true } },
+]
+
+export const topHolders = [
+  { rank: 1,  address: '0xBE0E...c27A', label: 'Binance 14',  pct: '8.24%', amount: '1.24M', value: '$210.1M' },
+  { rank: 2,  address: '0x4fA0...81b3', label: 'Binance Hot', pct: '5.81%', amount: '876.4K', value: '$148.5M' },
+  { rank: 3,  address: '0xd8dA...6045', label: null,           pct: '2.17%', amount: '327.1K', value: '$55.5M' },
+  { rank: 4,  address: '0xA9D1...7e2F', label: 'Coinbase',    pct: '1.93%', amount: '290.8K', value: '$49.3M' },
+  { rank: 5,  address: '0x40ec...E21F', label: null,           pct: '1.55%', amount: '233.5K', value: '$39.6M' },
+  { rank: 6,  address: '0x7Fc6...4B09', label: null,           pct: '1.22%', amount: '183.9K', value: '$31.2M' },
+  { rank: 7,  address: '0x3F5C...e7A2', label: 'OKX',         pct: '0.98%', amount: '147.7K', value: '$25.1M' },
+  { rank: 8,  address: '0xE6C8...1f09', label: null,           pct: '0.74%', amount: '111.5K', value: '$18.9M' },
+  { rank: 9,  address: '0x2B4F...A23D', label: null,           pct: '0.61%', amount: '91.9K',  value: '$15.6M' },
+  { rank: 10, address: '0x9aF0...4c81', label: 'Kraken',      pct: '0.52%', amount: '78.4K',  value: '$13.3M' },
+]
+
+export const topTraders = [
+  { rank: 1, address: '0xFD9a...2C1B', label: 'Whale #1',  bought: '$420K', sold: '$180K', pnl: '+$240K', pnlPos: true,  trades: 14 },
+  { rank: 2, address: '0xA3b4...9D12', label: null,         bought: '$148K', sold: '$210K', pnl: '-$62K',  pnlPos: false, trades: 8  },
+  { rank: 3, address: '0x9F1a...4412', label: null,         bought: '$98K',  sold: '$50K',  pnl: '+$48K',  pnlPos: true,  trades: 22 },
+  { rank: 4, address: '0x3Bc2...cA21', label: 'Sniper #3', bought: '$72K',  sold: '$89K',  pnl: '+$17K',  pnlPos: true,  trades: 6  },
+  { rank: 5, address: '0xF6A1...76A1', label: null,         bought: '$55K',  sold: '$55K',  pnl: '$0',     pnlPos: true,  trades: 11 },
+  { rank: 6, address: '0x99e5...e5c2', label: null,         bought: '$38K',  sold: '$14K',  pnl: '+$24K',  pnlPos: true,  trades: 9  },
+  { rank: 7, address: '0xF214...14f8', label: null,         bought: '$28K',  sold: '$42K',  pnl: '-$14K',  pnlPos: false, trades: 5  },
+  { rank: 8, address: '0xF5cE...5cE9', label: null,         bought: '$18K',  sold: '$8K',   pnl: '+$10K',  pnlPos: true,  trades: 3  },
+]
+
+export const openPositions = [
+  { address: '0xFD9a...2C1B', label: 'Whale #1',  side: 'long',  amount: '42.5 AAVE', value: '$7,200', entry: '$148.20', pnl: '+14.3%', pnlPos: true  },
+  { address: '0x9F1a...4412', label: null,         side: 'long',  amount: '18.2 AAVE', value: '$3,083', entry: '$155.40', pnl: '+8.9%',  pnlPos: true  },
+  { address: '0x3Bc2...cA21', label: 'Sniper #3', side: 'short', amount: '8.0 AAVE',  value: '$1,355', entry: '$182.00', pnl: '+7.0%',  pnlPos: true  },
+  { address: '0xA3b4...9D12', label: null,         side: 'long',  amount: '5.5 AAVE',  value: '$932',   entry: '$171.80', pnl: '-1.4%',  pnlPos: false },
+  { address: '0x99e5...e5c2', label: null,         side: 'long',  amount: '2.1 AAVE',  value: '$356',   entry: '$165.00', pnl: '+2.7%',  pnlPos: true  },
+]
+
+export const openOrders = [
+  { id: 1, type: 'buy',  label: 'Limit Buy',   amount: '50 AAVE',   value: '$7,750', trigger: '$155.00', placed: '2h ago' },
+  { id: 2, type: 'sell', label: 'Take Profit', amount: '8.85 AAVE', value: '$1,697', trigger: '$192.00', placed: '1d ago' },
+  { id: 3, type: 'sell', label: 'Stop Loss',   amount: '8.85 AAVE', value: '$1,326', trigger: '$150.00', placed: '1d ago' },
+  { id: 4, type: 'buy',  label: 'Limit Buy',   amount: '20 AAVE',   value: '$3,040', trigger: '$152.00', placed: '3h ago' },
+]
+
+export const liquidityPools = [
+  { rank: 1, address: '0x9F1a...4412', label: null,        pair: 'AAVE/ETH',  pool: 'Uniswap v3', share: '18.4%', value: '$6.61M', fees: '+$12.4K' },
+  { rank: 2, address: '0xFD9a...2C1B', label: 'Whale #1', pair: 'AAVE/USDC', pool: 'Uniswap v3', share: '14.2%', value: '$5.10M', fees: '+$8.9K'  },
+  { rank: 3, address: '0x3Bc2...cA21', label: null,        pair: 'AAVE/ETH',  pool: 'Balancer',   share: '9.8%',  value: '$3.52M', fees: '+$5.2K'  },
+  { rank: 4, address: '0xA3b4...9D12', label: null,        pair: 'AAVE/USDC', pool: 'Curve',      share: '7.1%',  value: '$2.55M', fees: '+$3.8K'  },
+  { rank: 5, address: '0x40ec...E21F', label: null,        pair: 'AAVE/USDT', pool: 'Uniswap v2', share: '5.6%',  value: '$2.01M', fees: '+$2.1K'  },
+  { rank: 6, address: '0xF6A1...76A1', label: null,        pair: 'AAVE/ETH',  pool: 'Sushiswap',  share: '3.2%',  value: '$1.15M', fees: '+$890'   },
+]
+
+export const devTokens = [
+  { rank: 1, address: '0x3Bc2...cA21', label: 'Dev Deployer', amount: '120.4K', pct: '0.80%', value: '$20.4M', sold: '0%',  soldPct: 0  },
+  { rank: 2, address: '0xF5cE...5cE9', label: 'Dev Wallet 2', amount: '84.2K',  pct: '0.56%', value: '$14.3M', sold: '12%', soldPct: 12 },
+  { rank: 3, address: '0x2B4F...A23D', label: 'Team Multisig', amount: '52.7K', pct: '0.35%', value: '$8.9M',  sold: '0%',  soldPct: 0  },
+]
+
+export function sparklinePath(trend) {
+  if (trend === 'up')   return 'M2,28 L8,24 L16,20 L22,15 L30,18 L38,12 L46,8 L54,10 L62,6 L70,4'
+  if (trend === 'down') return 'M2,4 L10,8 L18,6 L26,12 L34,18 L40,15 L48,22 L56,26 L64,24 L70,28'
+  return 'M2,16 L12,14 L22,18 L32,15 L42,17 L52,14 L62,16 L70,15'
+}
+
+export function sparklineColor(trend) {
+  if (trend === 'up')   return 'var(--color-teal)'
+  if (trend === 'down') return 'var(--color-red)'
+  return '#8892A4'
+}
+
+// Performance calendar — January 2025 (1st falls on Wednesday)
+// null = no trades that day
+export const performanceDays = [
+  { day: 1,  pnl:  320.12, trades: 1 },
+  { day: 2,  pnl: -192.40, trades: 1 },
+  { day: 3,  pnl:  540.80, trades: 3 },
+  { day: 4,  pnl:  88.55,  trades: 2 },
+  { day: 5,  pnl: -320.12, trades: 1 },
+  { day: 6,  pnl: -440.30, trades: 2 },
+  { day: 7,  pnl:  210.60, trades: 1 },
+  { day: 8,  pnl:  615.20, trades: 4 },
+  { day: 9,  pnl: -75.90,  trades: 1 },
+  { day: 10, pnl:  390.00, trades: 2 },
+  { day: 11, pnl: -280.15, trades: 1 },
+  { day: 12, pnl: -320.12, trades: 1 },
+  { day: 13, pnl: -155.40, trades: 2 },
+  { day: 14, pnl:  720.80, trades: 3 },
+  { day: 15, pnl:  490.10, trades: 2 },
+  { day: 16, pnl: -320.12, trades: 1 },
+  { day: 17, pnl: null,    trades: 0 },
+  { day: 18, pnl: -320.12, trades: 1 },
+  { day: 19, pnl:  145.70, trades: 1 },
+  { day: 20, pnl:  880.30, trades: 5 },
+  { day: 21, pnl: -95.50,  trades: 1 },
+  { day: 22, pnl:  230.45, trades: 2 },
+  { day: 23, pnl: null,    trades: 0 },
+  { day: 24, pnl:  670.20, trades: 3 },
+  { day: 25, pnl: -410.60, trades: 2 },
+  { day: 26, pnl: -180.30, trades: 1 },
+  { day: 27, pnl:  310.90, trades: 2 },
+  { day: 28, pnl:  555.00, trades: 3 },
+  { day: 29, pnl: -240.15, trades: 1 },
+  { day: 30, pnl:  820.40, trades: 4 },
+  { day: 31, pnl:  190.75, trades: 1 },
+]
+
+export const performanceMeta = {
+  year: 2025,
+  month: 1,
+  realisedPnl: '+$309.12',
+  realisedPnlPct: '+10.2%',
+  unrealisedPnl: '-$92.40',
+  unrealisedPnlPct: '-3.1%',
+  activeTriggers: 4,
+  tpActive: 2,
+  slActive: 2,
+}
