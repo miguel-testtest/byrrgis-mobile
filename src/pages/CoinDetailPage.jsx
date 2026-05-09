@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import StatusBar from '../components/layout/StatusBar'
-import TabBar from '../components/layout/TabBar'
 import DetailHeader from '../components/trading/DetailHeader'
 import DetailTabs from '../components/trading/DetailTabs'
 import OHLCBar from '../components/trading/OHLCBar'
@@ -69,7 +68,6 @@ export default function CoinDetailPage() {
       )}
 
       <AdvancedSheet open={advOpen} onClose={() => setAdvOpen(false)} />
-      <TabBar />
     </div>
   )
 }
