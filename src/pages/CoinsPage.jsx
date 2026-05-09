@@ -16,7 +16,7 @@ const TIME_OPTS = ['1h', '24h', '7D', '30D']
 const NL_CHAINS = ['BNB', 'ETH', 'SOL']
 
 export default function CoinsPage() {
-  const [category, setCategory]       = useState('New Listings')
+  const [category, setCategory]       = useState('Vetted')
   const [searchOpen, setSearchOpen]   = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [network, setNetwork]         = useState('All networks')

@@ -30,7 +30,7 @@ export default function CoinDetailPage() {
 
       <div
         className="scroll-area"
-        style={{ paddingBottom: isTradePanel ? 'calc(236px + env(safe-area-inset-bottom, 0px))' : '80px' }}
+        style={{ paddingBottom: isTradePanel ? 'calc(180px + env(safe-area-inset-bottom, 0px))' : '24px' }}
       >
         {/* TRADE */}
         <div className={`detail-panel${isTradePanel ? ' active' : ''}`}>
