@@ -35,7 +35,7 @@ export const AllNegative = {
   },
 }
 
-export const NoTriggers = {
+export const NoAutosell = {
   args: {
     stats: {
       ...portfolioStats,
