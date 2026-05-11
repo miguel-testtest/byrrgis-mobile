@@ -1,7 +1,9 @@
-import { IconChevronDown, IconSwapArrows, IconSettings } from '../ui/Icons'
+import { useState, useRef } from 'react'
+import { IconChevronDown, IconSwapArrows } from '../ui/Icons'
 
 const PRESETS_BUY  = ['0.01', '0.1', '1', '10']
 const PRESETS_SELL = ['25%', '50%', '75%', '100%']
+const SLIPPAGE_OPTS = ['0.5%', '1%', '2%', 'Custom']
 
 function AmountRow({ placeholder, tokenLabel, tokenBg, tokenInitial, sell }) {
   return (
@@ -26,22 +28,56 @@ function AmountRow({ placeholder, tokenLabel, tokenBg, tokenInitial, sell }) {
   )
 }
 
-export default function TradingPanel({ activeOp, onOpChange, onAdvClick, symbol }) {
+export default function TradingPanel({ activeOp, onOpChange, symbol }) {
+  const [expanded, setExpanded] = useState(false)
+  const [slippage, setSlippage] = useState('0.5%')
+  const dragStart = useRef(null)
+
+  const onDragStart = (e) => {
+    dragStart.current = { y: e.touches[0].clientY, wasExpanded: expanded }
+  }
+
+  const onDragEnd = (e) => {
+    if (dragStart.current === null) return
+    const dy = e.changedTouches[0].clientY - dragStart.current.y
+    if (dy > 40 && dragStart.current.wasExpanded) setExpanded(false)
+    else if (dy < -40 && !dragStart.current.wasExpanded) setExpanded(true)
+    dragStart.current = null
+  }
+
+  const handleTabClick = (op) => {
+    onOpChange(op)
+    setExpanded(true)
+  }
+
   return (
-    <div className="op-panel">
+    <div className={`op-panel${expanded ? ' op-panel--expanded' : ''}`}>
+      <div
+        className="op-panel__handle-area"
+        onTouchStart={onDragStart}
+        onTouchEnd={onDragEnd}
+        onClick={() => setExpanded(e => !e)}
+      >
+        <div className="op-panel__handle" />
+      </div>
+
       <div className="op-tabs">
         <button
           className={`op-tab${activeOp === 'buy' ? ' active-buy' : ''}`}
-          onClick={() => onOpChange('buy')}
+          onClick={() => handleTabClick('buy')}
         >Buy</button>
         <button
           className={`op-tab${activeOp === 'sell' ? ' active-sell' : ''}`}
-          onClick={() => onOpChange('sell')}
+          onClick={() => handleTabClick('sell')}
         >Sell</button>
         <button
           className={`op-tab${activeOp === 'swap' ? ' active-swap' : ''}`}
-          onClick={() => onOpChange('swap')}
+          onClick={() => handleTabClick('swap')}
         >Swap</button>
+        <button
+          className={`op-tab${activeOp === 'auto' ? ' active-auto' : ''}`}
+          onClick={() => handleTabClick('auto')}
+        >Auto</button>
       </div>
 
       {/* BUY */}
@@ -60,10 +96,6 @@ export default function TradingPanel({ activeOp, onOpChange, onAdvClick, symbol 
           <span>Est. network fee</span><span className="fees-row__val">0.04</span>
         </div>
         <button className="op-cta buy-cta">Buy {symbol}</button>
-        <button className="adv-link" onClick={onAdvClick}>
-          <IconSettings size={12} />
-          Adv. strategy
-        </button>
       </div>
 
       {/* SELL */}
@@ -82,10 +114,6 @@ export default function TradingPanel({ activeOp, onOpChange, onAdvClick, symbol 
           <span>Est. network fee</span><span className="fees-row__val">0.03</span>
         </div>
         <button className="op-cta sell-cta">Sell {symbol}</button>
-        <button className="adv-link" onClick={onAdvClick}>
-          <IconSettings size={12} />
-          Adv. strategy
-        </button>
       </div>
 
       {/* SWAP */}
@@ -133,6 +161,29 @@ export default function TradingPanel({ activeOp, onOpChange, onAdvClick, symbol 
           <span>Platform fee</span><span className="fees-row__val">0.5%</span>
         </div>
         <button className="op-cta swap-cta">Swap</button>
+      </div>
+
+      {/* AUTO */}
+      <div className={`op-sub${activeOp === 'auto' ? ' active' : ''}`}>
+        <div className="adv-field">
+          <div className="adv-field__label">Stop Loss Trigger</div>
+          <input className="adv-field__input" type="text" placeholder="SL" />
+        </div>
+        <div className="adv-field">
+          <div className="adv-field__label">Take Profit Trigger</div>
+          <input className="adv-field__input" type="text" placeholder="TP" />
+        </div>
+        <div className="adv-field__label" style={{ marginBottom: 8 }}>Slippage</div>
+        <div className="slippage-row">
+          {SLIPPAGE_OPTS.map(opt => (
+            <button
+              key={opt}
+              className={`slip-btn${slippage === opt ? ' active' : ''}`}
+              onClick={() => setSlippage(opt)}
+            >{opt}</button>
+          ))}
+        </div>
+        <button className="op-cta auto-cta">Start Auto-Sell</button>
       </div>
     </div>
   )

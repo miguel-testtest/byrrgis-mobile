@@ -1,8 +1,8 @@
 export default function PortfolioSubTabs({ activeTab, onTabChange, packCount, coinCount }) {
   const tabs = [
     { id: 'all',         label: `All Assets (${packCount + coinCount})` },
-    { id: 'packs',       label: `Packs (${packCount})` },
     { id: 'coins',       label: `Coins (${coinCount})` },
+    { id: 'packs',       label: `Packs (${packCount})` },
     { id: 'performance', label: 'Performance' },
   ]
 

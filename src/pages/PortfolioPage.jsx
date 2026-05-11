@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import AppShell from '../components/layout/AppShell'
 import PageHeader from '../components/layout/PageHeader'
-import { IconSearch, IconUserCircle } from '../components/ui/Icons'
+import { Search } from 'lucide-react'
+import { IconUserCircle } from '../components/ui/Icons'
 import StatStrip from '../components/portfolio/StatStrip'
 import PortfolioSubTabs from '../components/portfolio/PortfolioSubTabs'
 import AssetItem from '../components/portfolio/AssetItem'
 import AssetActionSheet from '../components/portfolio/AssetActionSheet'
+import PortfolioSearchOverlay from '../components/portfolio/PortfolioSearchOverlay'
 import { portfolioStats, portfolioPacks, portfolioCoins, packMiniCoins, performanceDays, performanceMeta } from '../data/mockData'
 import PerformanceCalendar from '../components/portfolio/PerformanceCalendar'
 
@@ -13,14 +15,19 @@ export default function PortfolioPage() {
   const [activeTab, setActiveTab]   = useState('all')
   const [expandedId, setExpandedId] = useState(null)
   const [sheet, setSheet]           = useState(null)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   function handleToggle(id) {
     setExpandedId(prev => (prev === id ? null : id))
-    setSheet(null)
   }
 
   function handleAction(id, type, tab) {
     setSheet({ id, type, tab })
+  }
+
+  function handleSearchSelect(id, type) {
+    setSearchOpen(false)
+    setSheet({ id, type, tab: 'sell' })
   }
 
   function handleTabChange(tab) {
@@ -58,8 +65,8 @@ export default function PortfolioPage() {
         title="My Portfolio"
         actions={
           <>
-            <button className="header-icon-btn" aria-label="Search">
-              <IconSearch size={20} />
+            <button className="header-icon-btn" aria-label="Search" onClick={() => setSearchOpen(true)}>
+              <Search size={18} />
             </button>
             <button className="header-icon-btn" aria-label="Profile">
               <IconUserCircle size={20} />
@@ -79,10 +86,10 @@ export default function PortfolioPage() {
 
       {activeTab === 'all' && (
         <>
-          <div className="port-section-hdr">Packs</div>
-          <div className="asset-list">{packItems}</div>
           <div className="port-section-hdr">Coins</div>
           <div className="asset-list">{coinItems}</div>
+          <div className="port-section-hdr">Packs</div>
+          <div className="asset-list">{packItems}</div>
         </>
       )}
 
@@ -114,6 +121,14 @@ export default function PortfolioPage() {
         packs={portfolioPacks}
         coins={portfolioCoins}
         onClose={() => setSheet(null)}
+      />
+
+      <PortfolioSearchOverlay
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSelectAsset={handleSearchSelect}
+        packs={portfolioPacks}
+        coins={portfolioCoins}
       />
     </AppShell>
   )

@@ -20,20 +20,32 @@ function CoinAvatar({ bg, init, chain }) {
   )
 }
 
+function coinDisplayName(name, sub) {
+  const slash = name.indexOf(' / ')
+  if (slash === -1) return { name, sub }
+  return {
+    name: name.slice(0, slash),
+    sub: `${name.slice(slash + 3)} · ${sub}`,
+  }
+}
+
 export default function AssetItem({ asset, type, miniCoins = [], expandedId, onToggle, onAction }) {
   const isExpanded = expandedId === asset.id
+  const { name, sub } = type === 'coin'
+    ? coinDisplayName(asset.name, asset.sub)
+    : { name: asset.name, sub: asset.sub }
 
   return (
     <div className={`asset-item${isExpanded ? ' expanded' : ''}`}>
-      <div className="asset-row" onClick={() => onToggle(asset.id)}>
+      <div className="asset-row" onClick={() => onAction(asset.id, type, 'sell')}>
         {type === 'pack'
           ? <PackAvatar emoji={asset.emoji} />
           : <CoinAvatar bg={asset.bg} init={asset.init} chain={asset.chain} />
         }
 
         <div className="asset-info">
-          <div className="asset-name">{asset.name}</div>
-          <div className="asset-sub">{asset.sub}</div>
+          <div className="asset-name">{name}</div>
+          <div className="asset-sub">{sub}</div>
         </div>
 
         <div className="asset-badges">
@@ -46,7 +58,10 @@ export default function AssetItem({ asset, type, miniCoins = [], expandedId, onT
           <div className={`asset-chg ${asset.pos ? 'pos' : 'neg'}`}>{asset.chg}</div>
         </div>
 
-        <span className="asset-chevron">
+        <span
+          className="asset-chevron"
+          onClick={e => { e.stopPropagation(); onToggle(asset.id) }}
+        >
           <IconChevronRight size={16} />
         </span>
       </div>

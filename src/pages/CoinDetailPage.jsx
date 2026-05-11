@@ -2,14 +2,10 @@ import { useState } from 'react'
 import StatusBar from '../components/layout/StatusBar'
 import DetailHeader from '../components/trading/DetailHeader'
 import DetailTabs from '../components/trading/DetailTabs'
-import OHLCBar from '../components/trading/OHLCBar'
-import TimeSelector from '../components/trading/TimeSelector'
-import CandlestickChart from '../components/trading/CandlestickChart'
+import TradingViewChart from '../components/trading/TradingViewChart'
 import TradingPanel from '../components/trading/TradingPanel'
-import AdvancedSheet from '../components/trading/AdvancedSheet'
 import TransactionList from '../components/trading/TransactionList'
 import TablesPanel from '../components/trading/TablesPanel'
-import BuySellBar from '../components/ui/BuySellBar'
 import { aaveDetail } from '../data/mockData'
 
 export default function CoinDetailPage() {
@@ -17,9 +13,6 @@ export default function CoinDetailPage() {
 
   const [activePanel, setActivePanel] = useState('Trade')
   const [activeOp, setActiveOp]       = useState('buy')
-  const [activeTime, setActiveTime]   = useState('1D')
-  const [advOpen, setAdvOpen]         = useState(false)
-
   const isTradePanel = activePanel === 'Trade'
 
   return (
@@ -30,21 +23,17 @@ export default function CoinDetailPage() {
 
       <div
         className="scroll-area"
-        style={{ paddingBottom: isTradePanel ? 'calc(180px + env(safe-area-inset-bottom, 0px))' : '24px' }}
+        style={isTradePanel
+          ? { overflow: 'hidden', display: 'flex', flexDirection: 'column', paddingBottom: 0 }
+          : { paddingBottom: '24px' }
+        }
       >
         {/* TRADE */}
-        <div className={`detail-panel${isTradePanel ? ' active' : ''}`}>
-          <OHLCBar ohlc={coin.ohlc} />
-          <TimeSelector active={activeTime} onChange={setActiveTime} />
-          <CandlestickChart candles={coin.candles} currentPrice="169.42" />
-          <div className="bs-strip">
-            <BuySellBar buyPct={62} showLabels={false} />
-            <div className="bs-strip__counts">
-              <span className="buy-ct">▲ {coin.buys.toLocaleString()} buys</span>
-              <span>·</span>
-              <span className="sell-ct">▼ {coin.sells.toLocaleString()} sells</span>
-            </div>
-          </div>
+        <div
+          className={`detail-panel${isTradePanel ? ' active' : ''}`}
+          style={isTradePanel ? { flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' } : undefined}
+        >
+          <TradingViewChart symbol={coin.symbol} />
         </div>
 
         {/* TRANSACTIONS */}
@@ -62,12 +51,9 @@ export default function CoinDetailPage() {
         <TradingPanel
           activeOp={activeOp}
           onOpChange={setActiveOp}
-          onAdvClick={() => setAdvOpen(true)}
           symbol={coin.symbol}
         />
       )}
-
-      <AdvancedSheet open={advOpen} onClose={() => setAdvOpen(false)} />
     </div>
   )
 }
