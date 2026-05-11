@@ -9,9 +9,9 @@ export default function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<CoinsPage />} />
+        <Route path="/" element={<PortfolioPage />} />
+        <Route path="/coins" element={<CoinsPage />} />
         <Route path="/coin/:id" element={<CoinDetailPage />} />
-        <Route path="/portfolio" element={<PortfolioPage />} />
         <Route path="/packs" element={<PacksPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -2,9 +2,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { IconCoins, IconPacks, IconPortfolio } from '../ui/Icons'
 
 const TABS = [
-  { path: '/',          label: 'Coins',     Icon: IconCoins },
-  { path: '/packs',     label: 'Packs',     Icon: IconPacks },
-  { path: '/portfolio', label: 'Portfolio', Icon: IconPortfolio },
+  { path: '/',      label: 'Portfolio', Icon: IconPortfolio },
+  { path: '/coins', label: 'Coins',     Icon: IconCoins },
+  { path: '/packs', label: 'Packs',     Icon: IconPacks },
 ]
 
 export default function TabBar() {
@@ -16,7 +16,7 @@ export default function TabBar() {
       {TABS.map(({ path, label, Icon }) => (
         <button
           key={path}
-          className={`tab-item${pathname === path ? ' active' : ''}`}
+          className={`tab-item${(path === '/' ? pathname === '/' : pathname.startsWith(path)) ? ' active' : ''}`}
           onClick={() => navigate(path)}
         >
           <Icon />

@@ -4,11 +4,9 @@ import PageHeader from '../components/layout/PageHeader'
 import CategoryTabs from '../components/coins/CategoryTabs'
 import FilterRow from '../components/coins/FilterRow'
 import FilterBottomSheet from '../components/coins/FilterBottomSheet'
-import SearchBar from '../components/coins/SearchBar'
 import CoinsTable from '../components/coins/CoinsTable'
 import NewListingsCard from '../components/coins/NewListingsCard'
 import NewListingsToolbar from '../components/coins/NewListingsToolbar'
-import { IconSearch, IconUserCircle } from '../components/ui/Icons'
 import { coins, newListings } from '../data/mockData'
 
 const NETWORKS = ['All networks', 'Ethereum', 'Solana']
@@ -16,39 +14,20 @@ const TIME_OPTS = ['1h', '24h', '7D', '30D']
 const NL_CHAINS = ['BNB', 'ETH', 'SOL']
 
 export default function CoinsPage() {
-  const [category, setCategory]       = useState('Vetted')
-  const [searchOpen, setSearchOpen]   = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [network, setNetwork]         = useState('All networks')
-  const [time, setTime]               = useState('24h')
-  const [sheet, setSheet]             = useState(null)
+  const [category, setCategory] = useState('Vetted')
+  const [network, setNetwork]   = useState('All networks')
+  const [time, setTime]         = useState('24h')
+  const [sheet, setSheet]       = useState(null)
 
   // New Listings sub-state
-  const [nlSubTab, setNlSubTab]   = useState('New pairs')
-  const [nlChain, setNlChain]     = useState('BNB')
-  const [nlSearch, setNlSearch]   = useState('')
-
-  function toggleSearch() {
-    setSearchOpen(o => {
-      if (o) setSearchQuery('')
-      return !o
-    })
-  }
+  const [nlSubTab, setNlSubTab] = useState('New pairs')
+  const [nlChain, setNlChain]   = useState('BNB')
+  const [nlSearch, setNlSearch] = useState('')
 
   const filtered = useMemo(() => {
-    let list = coins
-    if (network !== 'All networks') {
-      list = list.filter(c => c.chain === network)
-    }
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase()
-      list = list.filter(c =>
-        c.name.toLowerCase().includes(q) ||
-        c.symbol.toLowerCase().includes(q)
-      )
-    }
-    return list
-  }, [network, searchQuery])
+    if (network === 'All networks') return coins
+    return coins.filter(c => c.chain === network)
+  }, [network])
 
   const filteredNewListings = useMemo(() => {
     if (!nlSearch) return newListings
@@ -63,23 +42,7 @@ export default function CoinsPage() {
 
   return (
     <AppShell>
-      <PageHeader
-        title="Coins"
-        actions={
-          <>
-            <button className="header-icon-btn" onClick={toggleSearch} aria-label="Search">
-              <IconSearch size={20} />
-            </button>
-            <button className="header-icon-btn" aria-label="Profile">
-              <IconUserCircle size={20} />
-            </button>
-          </>
-        }
-      />
-
-      {searchOpen && (
-        <SearchBar value={searchQuery} onChange={setSearchQuery} />
-      )}
+      <PageHeader title="Coins" />
 
       <CategoryTabs active={category} onChange={setCategory} />
 
