@@ -38,6 +38,7 @@ export const coins = [
   },
   {
     id: 'trump', name: 'OFFICIAL TRUMP', symbol: 'TRUMP', chain: 'Solana', age: '5mo',
+    imageUrl: 'https://assets.coingecko.com/coins/images/53971/small/trump2048.jpg',
     score: 58,
     price: '$3.90', change: '-3.00%', pos: false,
     mcap: '$3.9B',
@@ -50,6 +51,7 @@ export const coins = [
   },
   {
     id: 'bonk', name: 'Bonk', symbol: 'BONK', chain: 'Solana', age: '2y',
+    imageUrl: 'https://assets.coingecko.com/coins/images/28600/small/bonk.jpg',
     score: 69,
     price: '$0.0000142', change: '+5.82%', pos: true,
     mcap: '$1.0B',
@@ -62,6 +64,7 @@ export const coins = [
   },
   {
     id: 'ray', name: 'Raydium', symbol: 'RAY', chain: 'Solana', age: '3y',
+    imageUrl: 'https://assets.coingecko.com/coins/images/13928/small/PSigc4ie_400x400.jpg',
     score: 78,
     price: '$2.89', change: '+1.45%', pos: true,
     mcap: '$733.2M',
@@ -122,6 +125,7 @@ export const coins = [
   },
   {
     id: 'jup', name: 'Jupiter', symbol: 'JUP', chain: 'Solana', age: '1y',
+    imageUrl: 'https://assets.coingecko.com/coins/images/34188/small/jup.png',
     score: 76,
     price: '$0.512', change: '+2.90%', pos: true,
     mcap: '$680.0M',
@@ -134,6 +138,7 @@ export const coins = [
   },
   {
     id: 'wif', name: 'dogwifhat', symbol: 'WIF', chain: 'Solana', age: '1y',
+    imageUrl: 'https://assets.coingecko.com/coins/images/33566/small/dogwifhat.png',
     score: 61,
     price: '$0.982', change: '-4.10%', pos: false,
     mcap: '$984.0M',
@@ -158,6 +163,7 @@ export const coins = [
   },
   {
     id: 'pyth', name: 'Pyth Network', symbol: 'PYTH', chain: 'Solana', age: '1y',
+    imageUrl: 'https://assets.coingecko.com/coins/images/31924/small/pyth.png',
     score: 71,
     price: '$0.218', change: '-2.44%', pos: false,
     mcap: '$320.4M',
@@ -170,6 +176,7 @@ export const coins = [
   },
   {
     id: 'wen', name: 'Wen', symbol: 'WEN', chain: 'Solana', age: '1y',
+    imageUrl: 'https://assets.coingecko.com/coins/images/34856/small/wen.png',
     score: 38,
     price: '$0.0000691', change: '-8.12%', pos: false,
     mcap: '$69.0M',

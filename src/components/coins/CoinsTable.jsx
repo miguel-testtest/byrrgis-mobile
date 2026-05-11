@@ -57,7 +57,7 @@ function CoinRow({ coin: c, onNavigate }) {
     <tr onClick={onNavigate} data-chain={c.chain}>
       <td className="col-token">
         <div className="token-cell">
-          <CoinAvatar avatarBg={c.avatarBg} initial={c.initial} chain={c.chain} emoji={c.emoji} />
+          <CoinAvatar avatarBg={c.avatarBg} initial={c.initial} chain={c.chain} emoji={c.emoji} symbol={c.symbol} imageUrl={c.imageUrl} />
           <div className="token-cell__info">
             <div className="token-cell__name">{c.name}</div>
             <div className="token-cell__sub">{c.symbol} · {c.age}</div>
