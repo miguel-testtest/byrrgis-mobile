@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import AppShell from '../components/layout/AppShell'
-import PageHeader from '../components/layout/PageHeader'
 import StatStrip from '../components/portfolio/StatStrip'
 import PortfolioSubTabs from '../components/portfolio/PortfolioSubTabs'
 import AssetTable from '../components/portfolio/AssetTable'
@@ -69,7 +68,6 @@ export default function PortfolioPage() {
 
   return (
     <AppShell>
-      <PageHeader title="My Portfolio" />
       <StatStrip stats={portfolioStats} />
 
       <PortfolioSubTabs
