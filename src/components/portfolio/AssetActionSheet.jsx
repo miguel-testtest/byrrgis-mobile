@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import { IconChainSolana, IconChainEthereum, IconChevronDown, IconAutosell } from '../ui/Icons'
+import { createPortal } from 'react-dom'
+import { IconChainSolana, IconChainEthereum, IconChevronDown, IconAutosell, IconSwapArrows } from '../ui/Icons'
 import MiniCoinRow from './MiniCoinRow'
 
 export default function AssetActionSheet({ sheet, packs, coins, miniCoins = [], onClose }) {
   const [activeTab, setActiveTab] = useState('sell')
+  const [swapAmount, setSwapAmount] = useState('')
 
   useEffect(() => {
     if (sheet) {
@@ -24,7 +26,7 @@ export default function AssetActionSheet({ sheet, packs, coins, miniCoins = [], 
   const visibleCoins = isPack ? miniCoins.slice(0, 4) : []
   const more = isPack && asset ? Math.max(0, (asset.coinCount ?? 0) - visibleCoins.length) : 0
 
-  return (
+  return createPortal(
     <>
       <div
         className={`sheet-overlay${isOpen ? ' visible' : ''}`}
@@ -92,6 +94,13 @@ export default function AssetActionSheet({ sheet, packs, coins, miniCoins = [], 
                 Sell
               </button>
               <button
+                className={`as-tab-pill swap-pill${activeTab === 'swap' ? ' active' : ''}`}
+                onClick={() => setActiveTab('swap')}
+              >
+                <IconSwapArrows size={13} />
+                Swap
+              </button>
+              <button
                 className={`as-tab-pill autosell-pill${activeTab === 'autosell' ? ' active' : ''}`}
                 onClick={() => setActiveTab('autosell')}
               >
@@ -130,6 +139,53 @@ export default function AssetActionSheet({ sheet, packs, coins, miniCoins = [], 
                 <button className="as-cta-btn">Sell {asset.name}</button>
               </div>
 
+              <div className={`as-content${activeTab === 'swap' ? ' active' : ''}`}>
+                <div className="as-swap-label">You pay</div>
+                <div className="as-amount-row">
+                  <input
+                    className="as-amount-input"
+                    type="number"
+                    placeholder="0.00"
+                    value={swapAmount}
+                    onChange={e => setSwapAmount(e.target.value)}
+                  />
+                  <div className="as-token-pill">
+                    <span>{asset.symbol}</span>
+                    <IconChevronDown size={12} />
+                  </div>
+                </div>
+                <div className="as-balance-row">
+                  <span>Position: {asset.val}</span>
+                  <button className="as-max-btn">MAX</button>
+                </div>
+                <div className="as-swap-divider">
+                  <IconSwapArrows size={16} />
+                </div>
+                <div className="as-swap-label">You receive</div>
+                <div className="as-amount-row" style={{ paddingBottom: 12 }}>
+                  <input
+                    className="as-amount-input"
+                    type="number"
+                    placeholder="0.00"
+                    readOnly
+                    value=""
+                  />
+                  <div className="as-token-pill">
+                    <span>USDC</span>
+                    <IconChevronDown size={12} />
+                  </div>
+                </div>
+                <div className="as-fee-row">
+                  <span>Est. network fee</span>
+                  <span>0.04</span>
+                </div>
+                <div className="as-fee-row">
+                  <span>Platform fee</span>
+                  <span>0.5%</span>
+                </div>
+                <button className="as-cta-btn as-swap-cta">Swap {asset.name}</button>
+              </div>
+
               <div className={`as-content${activeTab === 'autosell' ? ' active' : ''}`}>
                 <div className="as-fields-row">
                   <div className="as-field">
@@ -150,6 +206,7 @@ export default function AssetActionSheet({ sheet, packs, coins, miniCoins = [], 
           </>
         )}
       </div>
-    </>
+    </>,
+    document.body
   )
 }

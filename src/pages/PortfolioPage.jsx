@@ -5,7 +5,6 @@ import StatStrip from '../components/portfolio/StatStrip'
 import PortfolioSubTabs from '../components/portfolio/PortfolioSubTabs'
 import AssetTable from '../components/portfolio/AssetTable'
 import AssetActionSheet from '../components/portfolio/AssetActionSheet'
-import PortfolioSearchOverlay from '../components/portfolio/PortfolioSearchOverlay'
 import { portfolioStats, portfolioPacks, portfolioCoins, packMiniCoins, performanceDays, performanceMeta } from '../data/mockData'
 import PerformanceCalendar from '../components/portfolio/PerformanceCalendar'
 
@@ -52,7 +51,6 @@ function buildAggregate(assets, type) {
 export default function PortfolioPage() {
   const [activeTab, setActiveTab] = useState('all')
   const [sheet, setSheet]         = useState(null)
-  const [searchOpen, setSearchOpen] = useState(false)
 
   const allCoinsAgg = useMemo(() => buildAggregate(portfolioCoins, 'coin'), [])
   const allPacksAgg = useMemo(() => buildAggregate(portfolioPacks, 'pack'), [])
@@ -64,18 +62,14 @@ export default function PortfolioPage() {
     setSheet({ id, type, tab })
   }
 
-  function handleSearchSelect(id, type) {
-    setSearchOpen(false)
-    setSheet({ id, type, tab: 'sell' })
-  }
-
   function handleTabChange(tab) {
     setActiveTab(tab)
     setSheet(null)
   }
 
   return (
-    <AppShell onSearchPress={() => setSearchOpen(true)}>
+    <AppShell>
+      <PageHeader title="My Portfolio" />
       <StatStrip stats={portfolioStats} />
 
       <PortfolioSubTabs
@@ -123,14 +117,6 @@ export default function PortfolioPage() {
         coins={augmentedCoins}
         miniCoins={packMiniCoins}
         onClose={() => setSheet(null)}
-      />
-
-      <PortfolioSearchOverlay
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        onSelectAsset={handleSearchSelect}
-        packs={portfolioPacks}
-        coins={portfolioCoins}
       />
     </AppShell>
   )
