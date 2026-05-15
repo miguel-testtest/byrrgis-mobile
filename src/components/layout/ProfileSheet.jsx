@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TradingProfileListSheet from '../trading/TradingProfileListSheet'
 import TradingProfileEditor from '../trading/TradingProfileEditor'
 import WithdrawSheet from '../trading/WithdrawSheet'
@@ -10,9 +10,9 @@ const INITIAL_PROFILES = [
 ]
 
 const NAV_ITEMS = [
-  { label: 'Configuración' },
-  { label: 'Seguridad' },
-  { label: 'Notificaciones' },
+  { label: 'Settings' },
+  { label: 'Security' },
+  { label: 'Notifications' },
 ]
 
 function ChevronRight() {
@@ -47,11 +47,15 @@ function QuickAction({ icon, label, onClick }) {
 export default function ProfileSheet({ user, onClose }) {
   const initial = (user?.initial || user?.name?.[0] || '?').toUpperCase()
 
+  const sheetRef = useRef(null)
+
   const [profiles,       setProfiles]       = useState(INITIAL_PROFILES)
   const [listOpen,       setListOpen]       = useState(false)
   const [editorOpen,     setEditorOpen]     = useState(false)
   const [withdrawOpen,   setWithdrawOpen]   = useState(false)
   const [editingProfile, setEditingProfile] = useState(null)
+
+  useEffect(() => { sheetRef.current?.scrollTo({ top: 0 }) }, [])
 
   const activeName = profiles.find(p => p.active)?.name ?? '—'
 
@@ -81,7 +85,7 @@ export default function ProfileSheet({ user, onClose }) {
       />
 
       {/* Sheet */}
-      <div style={{
+      <div ref={sheetRef} style={{
         position: 'absolute', left: 0, right: 0, bottom: 0,
         zIndex: 111,
         background: 'var(--color-surface-1)',
@@ -109,7 +113,7 @@ export default function ProfileSheet({ user, onClose }) {
           </div>
 
           <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>
-            {user?.name || 'Cuenta 1'}
+            {user?.name || 'Account 1'}
           </div>
 
           {/* Wallet address pill */}
@@ -195,7 +199,7 @@ export default function ProfileSheet({ user, onClose }) {
             color: 'var(--color-red)', fontSize: 15, fontWeight: 500,
             fontFamily: 'var(--font-ui)', cursor: 'pointer', textAlign: 'left',
           }}>
-            Cerrar sesión
+            Sign out
           </button>
         </div>
       </div>
