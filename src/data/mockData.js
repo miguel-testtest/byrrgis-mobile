@@ -375,7 +375,7 @@ export const packMiniCoins = [
 ]
 
 export const portfolioPacks = [
-  { id: 'astroverse', name: 'Astroverse', emoji: '🌌', sub: 'Pack · 6 coins', coinCount: 6, score: 85, tpsl: true, val: '$1,820.44', chg: '+1.14%', pos: true, symbol: 'PACK',
+  { id: 'astroverse', name: 'Astroverse', emoji: '🌌', sub: 'Pack · 6 coins', coinCount: 6, score: 85, tpsl: true, autosell: true, val: '$1,820.44', chg: '+1.14%', pos: true, symbol: 'PACK',
     stats: { cur: '$1,820.44', inv: '$1,800.00', pnl: '+$20.44', pnlPct: '+1.14%', pnlPos: true } },
   { id: 'apex', name: 'Apex Digital', emoji: '🔴', sub: 'Pack · 3 coins', coinCount: 3, score: 85, tpsl: false, val: '$450.22', chg: '+0.05%', pos: true, symbol: 'PACK',
     stats: { cur: '$450.22', inv: '$450.00', pnl: '+$0.22', pnlPct: '+0.05%', pnlPos: true } },
@@ -388,7 +388,7 @@ export const portfolioPacks = [
 ]
 
 export const portfolioCoins = [
-  { id: 'btc-p', name: 'BTC / Solana', sub: 'Bitcoin · 15 tokens', score: 85, tpsl: true, bg: '#F7931A', init: '₿', chain: 'Solana', symbol: 'BTC', val: '$450.00', chg: '+0.05%', pos: true,
+  { id: 'btc-p', name: 'BTC / Solana', sub: 'Bitcoin · 15 tokens', score: 85, tpsl: true, autosell: true, bg: '#F7931A', init: '₿', chain: 'Solana', symbol: 'BTC', val: '$450.00', chg: '+0.05%', pos: true,
     stats: { cur: '$450.22', inv: '$450.00', pnl: '+$0.22', pnlPct: '+0.05%', pnlPos: true } },
   { id: 'ltc-p', name: 'LTC / Solana', sub: 'Litecoin · 9 tokens', score: 85, tpsl: false, bg: '#345D9D', init: 'Ł', chain: 'Solana', symbol: 'LTC', val: '$450.00', chg: '-0.05%', pos: false,
     stats: { cur: '$449.78', inv: '$450.00', pnl: '-$0.22', pnlPct: '-0.05%', pnlPos: false } },

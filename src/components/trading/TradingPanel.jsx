@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import {
   IconChevronDown, IconSwapArrows, IconChevronRight,
-  IconArrowUpRight, IconArrowDownRight, IconCrosshair,
+  IconArrowUpRight, IconArrowDownRight, IconCrosshair, IconPortfolio,
 } from '../ui/Icons'
 
 const PRESETS_BUY    = ['0.01', '0.1', '1', '10']
@@ -73,6 +73,11 @@ export default function TradingPanel({ activeOp, onOpChange, symbol }) {
   const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
   return (
+    <>
+    <div
+      className={`op-panel-overlay${expanded ? ' visible' : ''}`}
+      onClick={() => setExpanded(false)}
+    />
     <div
       className={`op-panel${expanded ? ' op-panel--expanded' : ''}`}
       data-op={activeOp}
@@ -237,11 +242,13 @@ export default function TradingPanel({ activeOp, onOpChange, symbol }) {
       {/* AUTO */}
       <div className={`op-sub${activeOp === 'auto' ? ' active' : ''}`}>
         <div className="auto-position-row">
-          <span className="auto-position-balance">{BALANCE_TOKEN} {symbol}</span>
+          <div className="auto-position-icon"><IconPortfolio size={16} /></div>
+          <div className="auto-position-info">
+            <span className="auto-position-balance">{BALANCE_TOKEN} {symbol}</span>
+            <span className="auto-position-caption">Available in your portfolio</span>
+          </div>
           <span className="auto-position-usd">≈ ${fmt(BALANCE_TOKEN * TOKEN_USD)}</span>
         </div>
-
-        <div className="auto-heading">Manage exit rules</div>
 
         <div className="adv-field">
           <div className="adv-field__label">Stop Loss Trigger</div>
@@ -287,5 +294,6 @@ export default function TradingPanel({ activeOp, onOpChange, symbol }) {
         )}
       </div>
     </div>
+    </>
   )
 }

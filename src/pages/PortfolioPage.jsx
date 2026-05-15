@@ -1,23 +1,64 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import AppShell from '../components/layout/AppShell'
 import PageHeader from '../components/layout/PageHeader'
 import StatStrip from '../components/portfolio/StatStrip'
 import PortfolioSubTabs from '../components/portfolio/PortfolioSubTabs'
-import AssetItem from '../components/portfolio/AssetItem'
+import AssetTable from '../components/portfolio/AssetTable'
 import AssetActionSheet from '../components/portfolio/AssetActionSheet'
 import PortfolioSearchOverlay from '../components/portfolio/PortfolioSearchOverlay'
 import { portfolioStats, portfolioPacks, portfolioCoins, packMiniCoins, performanceDays, performanceMeta } from '../data/mockData'
 import PerformanceCalendar from '../components/portfolio/PerformanceCalendar'
 
+function parseNum(str) {
+  if (typeof str === 'number') return str
+  const s = String(str).replace(/[$,%+ ]/g, '').replace(/,/g, '')
+  const suffix = s.slice(-1).toUpperCase()
+  const n = parseFloat(s)
+  if (suffix === 'B') return n * 1e9
+  if (suffix === 'M') return n * 1e6
+  if (suffix === 'K') return n * 1e3
+  return isNaN(n) ? 0 : n
+}
+
+function fmtUSD(n) {
+  return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+function buildAggregate(assets, type) {
+  let cur = 0, inv = 0, pnl = 0
+  assets.forEach(a => {
+    cur += parseNum(a.stats?.cur ?? a.val)
+    inv += parseNum(a.stats?.inv ?? '0')
+    pnl += parseNum(a.stats?.pnl ?? '0')
+  })
+  const pnlPct = inv > 0 ? (pnl / inv) * 100 : 0
+  const sign = n => n >= 0 ? '+' : '-'
+  return {
+    id: `all-${type}`,
+    name: type === 'coin' ? 'All Coins' : 'All Packs',
+    emoji: type === 'coin' ? '🪙' : '📦',
+    symbol: type === 'coin' ? 'COINS' : 'PACKS',
+    val: fmtUSD(cur),
+    stats: {
+      cur: fmtUSD(cur),
+      inv: fmtUSD(inv),
+      pnl: `${sign(pnl)}${fmtUSD(pnl)}`,
+      pnlPct: `${sign(pnl)}${Math.abs(pnlPct).toFixed(2)}%`,
+      pnlPos: pnl >= 0,
+    },
+  }
+}
+
 export default function PortfolioPage() {
-  const [activeTab, setActiveTab]   = useState('all')
-  const [expandedId, setExpandedId] = useState(null)
-  const [sheet, setSheet]           = useState(null)
+  const [activeTab, setActiveTab] = useState('all')
+  const [sheet, setSheet]         = useState(null)
   const [searchOpen, setSearchOpen] = useState(false)
 
-  function handleToggle(id) {
-    setExpandedId(prev => (prev === id ? null : id))
-  }
+  const allCoinsAgg = useMemo(() => buildAggregate(portfolioCoins, 'coin'), [])
+  const allPacksAgg = useMemo(() => buildAggregate(portfolioPacks, 'pack'), [])
+
+  const augmentedCoins = useMemo(() => [allCoinsAgg, ...portfolioCoins], [allCoinsAgg])
+  const augmentedPacks = useMemo(() => [allPacksAgg, ...portfolioPacks], [allPacksAgg])
 
   function handleAction(id, type, tab) {
     setSheet({ id, type, tab })
@@ -30,37 +71,11 @@ export default function PortfolioPage() {
 
   function handleTabChange(tab) {
     setActiveTab(tab)
-    setExpandedId(null)
     setSheet(null)
   }
 
-  const packItems = portfolioPacks.map(p => (
-    <AssetItem
-      key={p.id}
-      asset={p}
-      type="pack"
-      miniCoins={packMiniCoins}
-      expandedId={expandedId}
-      onToggle={handleToggle}
-      onAction={handleAction}
-    />
-  ))
-
-  const coinItems = portfolioCoins.map(c => (
-    <AssetItem
-      key={c.id}
-      asset={c}
-      type="coin"
-      expandedId={expandedId}
-      onToggle={handleToggle}
-      onAction={handleAction}
-    />
-  ))
-
   return (
     <AppShell onSearchPress={() => setSearchOpen(true)}>
-      <PageHeader title="My Portfolio" />
-
       <StatStrip stats={portfolioStats} />
 
       <PortfolioSubTabs
@@ -73,23 +88,23 @@ export default function PortfolioPage() {
       {activeTab === 'all' && (
         <>
           <div className="port-section-hdr">Coins</div>
-          <div className="asset-list">{coinItems}</div>
+          <AssetTable assets={portfolioCoins} type="coin" onAction={handleAction} />
           <div className="port-section-hdr">Packs</div>
-          <div className="asset-list">{packItems}</div>
+          <AssetTable assets={portfolioPacks} type="pack" miniCoins={packMiniCoins} onAction={handleAction} />
         </>
       )}
 
       {activeTab === 'packs' && (
         <>
           <div className="port-section-hdr">Packs ({portfolioPacks.length})</div>
-          <div className="asset-list">{packItems}</div>
+          <AssetTable assets={portfolioPacks} type="pack" miniCoins={packMiniCoins} onAction={handleAction} />
         </>
       )}
 
       {activeTab === 'coins' && (
         <>
           <div className="port-section-hdr">Coins ({portfolioCoins.length})</div>
-          <div className="asset-list">{coinItems}</div>
+          <AssetTable assets={portfolioCoins} type="coin" onAction={handleAction} />
         </>
       )}
 
@@ -104,8 +119,9 @@ export default function PortfolioPage() {
 
       <AssetActionSheet
         sheet={sheet}
-        packs={portfolioPacks}
-        coins={portfolioCoins}
+        packs={augmentedPacks}
+        coins={augmentedCoins}
+        miniCoins={packMiniCoins}
         onClose={() => setSheet(null)}
       />
 

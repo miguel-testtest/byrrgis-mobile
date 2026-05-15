@@ -1,6 +1,5 @@
-import { IconChevronRight, IconChainSolana, IconChainEthereum } from '../ui/Icons'
 import TpSlTag from '../ui/TpSlTag'
-import AssetExpand from './AssetExpand'
+import CoinAvatar from '../ui/CoinAvatar'
 
 function PackAvatar({ emoji }) {
   return (
@@ -10,70 +9,61 @@ function PackAvatar({ emoji }) {
   )
 }
 
-function CoinAvatar({ bg, init, chain }) {
-  const ChainIcon = chain === 'Solana' ? IconChainSolana : IconChainEthereum
-  return (
-    <div className="asset-av round" style={{ background: bg }}>
-      {init}
-      <div className="asset-chain-dot"><ChainIcon /></div>
-    </div>
-  )
-}
-
 function coinDisplayName(name, sub) {
+  const cleanSub = sub.replace(/\s*·\s*\d+\s*tokens/i, '').trim()
   const slash = name.indexOf(' / ')
-  if (slash === -1) return { name, sub }
+  if (slash === -1) return { name, sub: cleanSub }
   return {
     name: name.slice(0, slash),
-    sub: `${name.slice(slash + 3)} · ${sub}`,
+    sub: cleanSub,
   }
 }
 
-export default function AssetItem({ asset, type, miniCoins = [], expandedId, onToggle, onAction }) {
-  const isExpanded = expandedId === asset.id
+export default function AssetItem({ asset, type, onAction }) {
   const { name, sub } = type === 'coin'
     ? coinDisplayName(asset.name, asset.sub)
     : { name: asset.name, sub: asset.sub }
 
+  const stats = asset.stats || {}
+
   return (
-    <div className={`asset-item${isExpanded ? ' expanded' : ''}`}>
-      <div className="asset-row" onClick={() => onAction(asset.id, type, 'sell')}>
-        {type === 'pack'
-          ? <PackAvatar emoji={asset.emoji} />
-          : <CoinAvatar bg={asset.bg} init={asset.init} chain={asset.chain} />
+    <tr className="asset-tr" onClick={() => onAction(asset.id, type, 'sell')}>
+      <td className="at-col-token">
+        <div className="token-cell">
+          {type === 'pack'
+            ? <PackAvatar emoji={asset.emoji} />
+            : <CoinAvatar avatarBg={asset.bg} initial={asset.init} chain={asset.chain} symbol={asset.symbol} size={40} />
+          }
+          <div className="token-cell__info">
+            <div className="at-name-row">
+              <span className="at-name-text">{name}</span>
+              <span className="at-score-badge">{asset.score}</span>
+              {asset.tpsl && <TpSlTag />}
+            </div>
+            <div className="token-cell__sub">{sub}</div>
+          </div>
+        </div>
+      </td>
+
+      <td className="at-col-cur">
+        <div className="tcell__primary">{stats.cur ?? asset.val}</div>
+      </td>
+
+      <td className="at-col-inv">
+        <div className="tcell__primary">{stats.inv ?? '—'}</div>
+      </td>
+
+      <td className="at-col-pnl">
+        <div className={`tcell__primary ${stats.pnlPos ? 'pos' : 'neg'}`}>{stats.pnl}</div>
+        <div className={`tcell__secondary ${stats.pnlPos ? 'pos' : 'neg'}`}>{stats.pnlPct}</div>
+      </td>
+
+      <td className="at-col-sell" onClick={e => e.stopPropagation()}>
+        {asset.autosell
+          ? <button className="stop-pill-btn" onClick={() => onAction(asset.id, type, 'autosell')}>Stop</button>
+          : <button className="sell-pill-btn" onClick={() => onAction(asset.id, type, 'sell')}>Sell</button>
         }
-
-        <div className="asset-info">
-          <div className="asset-name">{name}</div>
-          <div className="asset-sub">{sub}</div>
-        </div>
-
-        <div className="asset-badges">
-          <div className="asset-score">{asset.score}</div>
-          {asset.tpsl && <TpSlTag />}
-        </div>
-
-        <div className="asset-val-col">
-          <div className="asset-val">{asset.val}</div>
-          <div className={`asset-chg ${asset.pos ? 'pos' : 'neg'}`}>{asset.chg}</div>
-        </div>
-
-        <span
-          className="asset-chevron"
-          onClick={e => { e.stopPropagation(); onToggle(asset.id) }}
-        >
-          <IconChevronRight size={16} />
-        </span>
-      </div>
-
-      <div className="asset-expand">
-        <AssetExpand
-          asset={asset}
-          type={type}
-          miniCoins={miniCoins}
-          onAction={onAction}
-        />
-      </div>
-    </div>
+      </td>
+    </tr>
   )
 }

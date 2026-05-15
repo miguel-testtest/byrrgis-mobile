@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import AppShell from '../components/layout/AppShell'
-import PageHeader from '../components/layout/PageHeader'
 import CategoryTabs from '../components/coins/CategoryTabs'
 import FilterRow from '../components/coins/FilterRow'
 import FilterBottomSheet from '../components/coins/FilterBottomSheet'
@@ -42,8 +41,6 @@ export default function CoinsPage() {
 
   return (
     <AppShell>
-      <PageHeader title="Coins" />
-
       <CategoryTabs active={category} onChange={setCategory} />
 
       {isNewListings ? (

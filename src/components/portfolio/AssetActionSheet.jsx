@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { IconChainSolana, IconChainEthereum, IconChevronDown, IconAutosell } from '../ui/Icons'
+import MiniCoinRow from './MiniCoinRow'
 
-export default function AssetActionSheet({ sheet, packs, coins, onClose }) {
+export default function AssetActionSheet({ sheet, packs, coins, miniCoins = [], onClose }) {
   const [activeTab, setActiveTab] = useState('sell')
 
   useEffect(() => {
@@ -19,6 +20,9 @@ export default function AssetActionSheet({ sheet, packs, coins, onClose }) {
     : null
 
   const isOpen = !!sheet
+  const isPack = sheet?.type === 'pack'
+  const visibleCoins = isPack ? miniCoins.slice(0, 4) : []
+  const more = isPack && asset ? Math.max(0, (asset.coinCount ?? 0) - visibleCoins.length) : 0
 
   return (
     <>
@@ -35,7 +39,7 @@ export default function AssetActionSheet({ sheet, packs, coins, onClose }) {
         {asset && (
           <>
             <div className="as-asset-row">
-              {sheet.type === 'pack' ? (
+              {sheet.type === 'pack' || asset.emoji ? (
                 <div className="as-asset-av pack">
                   <span>{asset.emoji}</span>
                 </div>
@@ -47,9 +51,38 @@ export default function AssetActionSheet({ sheet, packs, coins, onClose }) {
                   </div>
                 </div>
               )}
-              <span className="as-asset-name">{asset.name}</span>
-              <span className="as-asset-val">{asset.val}</span>
+              <div className="as-asset-info">
+                <div className="as-asset-top">
+                  <span className="as-asset-name">{asset.name}</span>
+                  <span className="as-asset-val">{asset.val}</span>
+                </div>
+                {asset.stats && (
+                  <div className="as-inline-stats">
+                    <span className="as-istat">
+                      <span className="as-istat-label">Invested</span>
+                      <span className="as-istat-value">{asset.stats.inv}</span>
+                    </span>
+                    <span className="as-istat-sep" />
+                    <span className="as-istat">
+                      <span className="as-istat-label">P&L</span>
+                      <span className={`as-istat-value ${asset.stats.pnlPos ? 'pos' : 'neg'}`}>{asset.stats.pnl}</span>
+                    </span>
+                    <span className="as-istat-sep" />
+                    <span className={`as-istat-pct ${asset.stats.pnlPos ? 'pos' : 'neg'}`}>{asset.stats.pnlPct}</span>
+                  </div>
+                )}
+              </div>
             </div>
+
+            {isPack && visibleCoins.length > 0 && (
+              <div className="as-coins-section">
+                <div className="ae-coins-hdr">Coins ({asset.coinCount})</div>
+                {visibleCoins.map((c, i) => <MiniCoinRow key={i} coin={c} />)}
+                {more > 0 && (
+                  <div className="ae-more-hint">↓ {more} more coin{more > 1 ? 's' : ''}</div>
+                )}
+              </div>
+            )}
 
             <div className="as-tab-row">
               <button
