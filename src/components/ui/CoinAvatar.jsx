@@ -1,16 +1,26 @@
 import { useState } from 'react'
-import { IconChainSolana, IconChainEthereum } from './Icons'
+
+const CDN = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color'
+
+const CHAIN_LOGO = {
+  Solana:   `${CDN}/sol.png`,
+  Ethereum: `${CDN}/eth.png`,
+}
 
 function ChainBadge({ chain }) {
-  const Icon = chain === 'Solana' ? IconChainSolana : IconChainEthereum
+  const src = CHAIN_LOGO[chain]
   return (
     <div className="token-cell__chain-badge">
-      <Icon />
+      {src && (
+        <img
+          src={src}
+          alt={chain}
+          style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '50%', display: 'block' }}
+        />
+      )}
     </div>
   )
 }
-
-const CDN = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color'
 
 export default function CoinAvatar({ avatarBg, initial, chain, emoji, imageUrl, symbol, size = 40, fontSize }) {
   const [failed, setFailed] = useState(false)

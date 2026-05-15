@@ -305,7 +305,7 @@ export function IconCoins({ size = 22 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="9"/>
-      <path d="M12 6v2M12 16v2M9 9.27C9 8.02 10.34 7 12 7s3 1.02 3 2.27c0 2.73-6 2.27-6 5.46C9 16.03 10.34 17 12 17s3-1.02 3-2.27"/>
+      <path className="tab-icon-draw" d="M12 6v2M12 16v2M9 9.27C9 8.02 10.34 7 12 7s3 1.02 3 2.27c0 2.73-6 2.27-6 5.46C9 16.03 10.34 17 12 17s3-1.02 3-2.27"/>
     </svg>
   )
 }
@@ -314,7 +314,7 @@ export function IconPacks({ size = 22 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="3" width="20" height="14" rx="2"/>
-      <rect x="5" y="6" width="14" height="8" rx="1"/>
+      <rect className="tab-icon-draw" x="5" y="6" width="14" height="8" rx="1"/>
       <path d="M2 20h20M6 20v-3M18 20v-3"/>
     </svg>
   )
@@ -324,7 +324,7 @@ export function IconPortfolio({ size = 22 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 3v18h18"/>
-      <path d="M7 16l4-4 4 4 4-7"/>
+      <path className="tab-icon-draw" d="M7 16l4-4 4 4 4-7"/>
     </svg>
   )
 }

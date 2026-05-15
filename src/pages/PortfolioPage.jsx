@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import AppShell from '../components/layout/AppShell'
 import PageHeader from '../components/layout/PageHeader'
-import { Search } from 'lucide-react'
-import { IconUserCircle } from '../components/ui/Icons'
 import StatStrip from '../components/portfolio/StatStrip'
 import PortfolioSubTabs from '../components/portfolio/PortfolioSubTabs'
 import AssetItem from '../components/portfolio/AssetItem'
@@ -60,20 +58,8 @@ export default function PortfolioPage() {
   ))
 
   return (
-    <AppShell>
-      <PageHeader
-        title="My Portfolio"
-        actions={
-          <>
-            <button className="header-icon-btn" aria-label="Search" onClick={() => setSearchOpen(true)}>
-              <Search size={18} />
-            </button>
-            <button className="header-icon-btn" aria-label="Profile">
-              <IconUserCircle size={20} />
-            </button>
-          </>
-        }
-      />
+    <AppShell onSearchPress={() => setSearchOpen(true)}>
+      <PageHeader title="My Portfolio" />
 
       <StatStrip stats={portfolioStats} />
 

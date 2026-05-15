@@ -24,8 +24,8 @@ export default function CoinDetailPage() {
       <div
         className="scroll-area"
         style={isTradePanel
-          ? { overflow: 'hidden', display: 'flex', flexDirection: 'column', paddingBottom: 0 }
-          : { paddingBottom: '24px' }
+          ? { overflow: 'hidden', display: 'flex', flexDirection: 'column', paddingTop: 0, paddingBottom: 0 }
+          : { paddingTop: 0, paddingBottom: '24px' }
         }
       >
         {/* TRADE */}

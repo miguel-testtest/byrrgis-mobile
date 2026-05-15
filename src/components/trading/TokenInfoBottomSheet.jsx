@@ -150,19 +150,19 @@ export default function TokenInfoBottomSheet({ open, onClose, coin }) {
           <SectionLabel>Token Info</SectionLabel>
           <div className="ti-stat-grid">
             <StatCol label="Top 10 H.">
-              <div className="ti-icon-val">
+              <div className="ti-icon-val pos">
                 <IconTrophy size={12} />
                 <span className="ti-value pos">{coin.top10H}</span>
               </div>
             </StatCol>
             <StatCol label="Dev H.">
-              <div className="ti-icon-val">
+              <div className="ti-icon-val muted">
                 <IconChefHat size={12} />
                 <span className="ti-value muted">{coin.devH}</span>
               </div>
             </StatCol>
             <StatCol label="Snipers H.">
-              <div className="ti-icon-val">
+              <div className="ti-icon-val pos">
                 <IconCrosshair size={12} />
                 <span className="ti-value pos">{coin.snipersH}</span>
               </div>
@@ -170,19 +170,19 @@ export default function TokenInfoBottomSheet({ open, onClose, coin }) {
           </div>
           <div className="ti-stat-grid">
             <StatCol label="Insiders H.">
-              <div className="ti-icon-val">
+              <div className="ti-icon-val pos">
                 <IconGhost size={12} />
                 <span className="ti-value pos">{coin.insidersH}</span>
               </div>
             </StatCol>
             <StatCol label="Bundlers H.">
-              <div className="ti-icon-val">
+              <div className="ti-icon-val pos">
                 <IconLayers size={12} />
                 <span className="ti-value pos">{coin.bundlersH}</span>
               </div>
             </StatCol>
             <StatCol label="Smart">
-              <div className="ti-icon-val">
+              <div className="ti-icon-val warn">
                 <IconCandlestick size={12} />
                 <span className="ti-value warn">{coin.smart}</span>
               </div>

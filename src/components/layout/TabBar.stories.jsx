@@ -1,4 +1,3 @@
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import TabBar from './TabBar'
 
 export default {
@@ -14,38 +13,14 @@ export default {
   ],
 }
 
+export const PortfolioActive = {
+  parameters: { initialPath: '/' },
+}
+
 export const CoinsActive = {
-  decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="*" element={<Story />} />
-        </Routes>
-      </MemoryRouter>
-    ),
-  ],
+  parameters: { initialPath: '/coins' },
 }
 
 export const PacksActive = {
-  decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={['/packs']}>
-        <Routes>
-          <Route path="*" element={<Story />} />
-        </Routes>
-      </MemoryRouter>
-    ),
-  ],
-}
-
-export const PortfolioActive = {
-  decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={['/portfolio']}>
-        <Routes>
-          <Route path="*" element={<Story />} />
-        </Routes>
-      </MemoryRouter>
-    ),
-  ],
+  parameters: { initialPath: '/packs' },
 }

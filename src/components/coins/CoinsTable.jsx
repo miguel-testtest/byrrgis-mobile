@@ -1,21 +1,76 @@
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CoinAvatar from '../ui/CoinAvatar'
 import ScoreBadge from '../ui/ScoreBadge'
 import BuySellBar from '../ui/BuySellBar'
 import Sparkline from '../ui/Sparkline'
-import { IconSort, IconLock } from '../ui/Icons'
+import { IconChevronUp, IconChevronDown, IconSort, IconLock } from '../ui/Icons'
 
-function SortHeader({ label }) {
+// Converts "$2.5B", "124K", "+2.14%", "$0.001" → number
+function parseNum(str) {
+  if (typeof str === 'number') return str
+  const s = String(str).replace(/[$,%+,]/g, '')
+  const suffix = s.slice(-1).toUpperCase()
+  const n = parseFloat(s)
+  if (suffix === 'B') return n * 1e9
+  if (suffix === 'M') return n * 1e6
+  if (suffix === 'K') return n * 1e3
+  return isNaN(n) ? 0 : n
+}
+
+const SORT_ACCESSORS = {
+  token:   c => c.name.toLowerCase(),
+  score:   c => c.score,
+  price:   c => parseNum(c.price),
+  mcap:    c => parseNum(c.mcap),
+  liq:     c => parseNum(c.liq),
+  holders: c => parseNum(c.holders),
+  vol:     c => parseNum(c.vol),
+}
+
+function SortHeader({ label, colKey, sortKey, sortDir, onSort }) {
+  const active = sortKey === colKey
   return (
-    <span className="th-inner">
+    <button
+      className={`th-inner${active ? ' active' : ''}`}
+      onClick={() => onSort(colKey)}
+      aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
       {label}
-      <IconSort />
-    </span>
+      {active
+        ? sortDir === 'asc' ? <IconChevronUp size={12} /> : <IconChevronDown size={12} />
+        : <IconSort />
+      }
+    </button>
   )
 }
 
 export default function CoinsTable({ coins }) {
   const navigate = useNavigate()
+  const [sortKey, setSortKey] = useState(null)
+  const [sortDir, setSortDir] = useState('desc')
+
+  function handleSort(key) {
+    if (sortKey === key) {
+      setSortDir(d => d === 'desc' ? 'asc' : 'desc')
+    } else {
+      setSortKey(key)
+      setSortDir('desc')
+    }
+  }
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return coins
+    const accessor = SORT_ACCESSORS[sortKey]
+    return [...coins].sort((a, b) => {
+      const av = accessor(a)
+      const bv = accessor(b)
+      if (typeof av === 'string') {
+        return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
+      }
+      return sortDir === 'asc' ? av - bv : bv - av
+    })
+  }, [coins, sortKey, sortDir])
 
   if (coins.length === 0) {
     return (
@@ -25,25 +80,29 @@ export default function CoinsTable({ coins }) {
     )
   }
 
+  const sh = (label, colKey) => (
+    <SortHeader label={label} colKey={colKey} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
+
   return (
     <div className="table-scroll-wrapper">
       <table className="coins-table">
         <thead>
           <tr>
-            <th className="col-token"><SortHeader label="Token" /></th>
-            <th className="col-score"><SortHeader label="Score" /></th>
-            <th className="col-price"><SortHeader label="Price / 24H" /></th>
-            <th className="col-mcap"><SortHeader label="MCap" /></th>
-            <th className="col-liq"><SortHeader label="Liquidity" /></th>
-            <th className="col-holders"><SortHeader label="Holders" /></th>
-            <th className="col-vol"><SortHeader label="Vol 24H" /></th>
+            <th className="col-token">{sh('Token', 'token')}</th>
+            <th className="col-score">{sh('Score', 'score')}</th>
+            <th className="col-price">{sh('Price / 24H', 'price')}</th>
+            <th className="col-mcap">{sh('MCap', 'mcap')}</th>
+            <th className="col-liq">{sh('Liquidity', 'liq')}</th>
+            <th className="col-holders">{sh('Holders', 'holders')}</th>
+            <th className="col-vol">{sh('Vol 24H', 'vol')}</th>
             <th className="col-bs">Buy / Sell</th>
             <th className="col-trend">7D Trend</th>
             <th className="col-buy"></th>
           </tr>
         </thead>
         <tbody>
-          {coins.map(c => (
+          {sorted.map(c => (
             <CoinRow key={c.id} coin={c} onNavigate={() => navigate(`/coin/${c.id}`)} />
           ))}
         </tbody>

@@ -1,14 +1,81 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { topHolders, topTraders, openPositions, openOrders, liquidityPools, devTokens } from '../../data/mockData'
+import { IconChevronUp, IconChevronDown, IconSort } from '../ui/Icons'
 
 const TABS = [
-  { key: 'holders',      label: 'Top holders',   count: '857K' },
-  { key: 'traders',      label: 'Top traders',   count: '48'   },
-  { key: 'positions',    label: 'Positions',      count: null   },
-  { key: 'orders',       label: 'Orders',         count: null   },
-  { key: 'lp',           label: 'Liquidity Pool', count: '6'    },
-  { key: 'dev',          label: 'Dev Tokens',     count: '3'    },
+  { key: 'holders',   label: 'Top holders',   count: '857K' },
+  { key: 'traders',   label: 'Top traders',   count: '48'   },
+  { key: 'positions', label: 'Positions',     count: null   },
+  { key: 'orders',    label: 'Orders',        count: null   },
+  { key: 'lp',        label: 'Liquidity Pool', count: '6'   },
+  { key: 'dev',       label: 'Dev Tokens',    count: '3'    },
 ]
+
+function parseNum(str) {
+  if (typeof str === 'number') return str
+  if (!str || str === '-') return -Infinity
+  const s = String(str).replace(/[$,%+, ]/g, '')
+  const suffix = s.slice(-1).toUpperCase()
+  const n = parseFloat(s)
+  if (suffix === 'B') return n * 1e9
+  if (suffix === 'M') return n * 1e6
+  if (suffix === 'K') return n * 1e3
+  return isNaN(n) ? -Infinity : n
+}
+
+function parsePct(str) {
+  return parseFloat(String(str)) || 0
+}
+
+function parseAmount(str) {
+  return parseFloat(String(str)) || 0
+}
+
+function useSortedData(data, accessors) {
+  const [sortKey, setSortKey] = useState(null)
+  const [sortDir, setSortDir] = useState('desc')
+
+  function handleSort(key) {
+    if (sortKey === key) {
+      setSortDir(d => d === 'desc' ? 'asc' : 'desc')
+    } else {
+      setSortKey(key)
+      setSortDir('desc')
+    }
+  }
+
+  const sorted = useMemo(() => {
+    if (!sortKey || !accessors[sortKey]) return data
+    const accessor = accessors[sortKey]
+    return [...data].sort((a, b) => {
+      const av = accessor(a)
+      const bv = accessor(b)
+      if (typeof av === 'string') {
+        return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
+      }
+      return sortDir === 'asc' ? av - bv : bv - av
+    })
+  }, [data, sortKey, sortDir])
+
+  return { sorted, sortKey, sortDir, handleSort }
+}
+
+function SortHeader({ label, colKey, sortKey, sortDir, onSort }) {
+  const active = sortKey === colKey
+  return (
+    <button
+      className={`th-inner${active ? ' active' : ''}`}
+      onClick={() => onSort(colKey)}
+      aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
+      {label}
+      {active
+        ? sortDir === 'asc' ? <IconChevronUp size={12} /> : <IconChevronDown size={12} />
+        : <IconSort />
+      }
+    </button>
+  )
+}
 
 function FilterBtn() {
   return (
@@ -31,23 +98,31 @@ function WalletCell({ address, label }) {
 }
 
 function HoldersTable() {
+  const { sorted, sortKey, sortDir, handleSort } = useSortedData(topHolders, {
+    pct:    r => parsePct(r.pct),
+    amount: r => parseNum(r.amount),
+    value:  r => parseNum(r.value),
+  })
+  const sh = (label, key) => (
+    <SortHeader label={label} colKey={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
   return (
     <div className="dht-wrapper">
       <table className="dht-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Wallet</th>
-            <th>% Supply</th>
-            <th>Amount</th>
-            <th>Value</th>
+            <th className="dht-col--rank">#</th>
+            <th className="dht-col--wallet">Wallet</th>
+            <th>{sh('% Supply', 'pct')}</th>
+            <th>{sh('Amount', 'amount')}</th>
+            <th>{sh('Value', 'value')}</th>
           </tr>
         </thead>
         <tbody>
-          {topHolders.map(row => (
+          {sorted.map(row => (
             <tr key={row.rank}>
-              <td><span className="dht-muted">{row.rank}</span></td>
-              <td><WalletCell address={row.address} label={row.label} /></td>
+              <td className="dht-col--rank"><span className="dht-muted">{row.rank}</span></td>
+              <td className="dht-col--wallet"><WalletCell address={row.address} label={row.label} /></td>
               <td><span className="dht-primary">{row.pct}</span></td>
               <td><span className="dht-primary">{row.amount} AAVE</span></td>
               <td><span className="dht-primary">{row.value}</span></td>
@@ -60,6 +135,15 @@ function HoldersTable() {
 }
 
 function TradersTable() {
+  const { sorted, sortKey, sortDir, handleSort } = useSortedData(topTraders, {
+    bought: r => parseNum(r.bought),
+    sold:   r => parseNum(r.sold),
+    trades: r => r.trades,
+    pnl:    r => parseNum(r.pnl),
+  })
+  const sh = (label, key) => (
+    <SortHeader label={label} colKey={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
   return (
     <>
       <div className="dht-toolbar"><FilterBtn /></div>
@@ -67,25 +151,23 @@ function TradersTable() {
         <table className="dht-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Wallet</th>
-              <th>Bought</th>
-              <th>Sold</th>
-              <th>Trades</th>
-              <th>R. PnL</th>
+              <th className="dht-col--rank">#</th>
+              <th className="dht-col--wallet">Wallet</th>
+              <th>{sh('Bought', 'bought')}</th>
+              <th>{sh('Sold', 'sold')}</th>
+              <th>{sh('Trades', 'trades')}</th>
+              <th>{sh('R. PnL', 'pnl')}</th>
             </tr>
           </thead>
           <tbody>
-            {topTraders.map(row => (
+            {sorted.map(row => (
               <tr key={row.rank}>
-                <td><span className="dht-muted">{row.rank}</span></td>
-                <td><WalletCell address={row.address} label={row.label} /></td>
+                <td className="dht-col--rank"><span className="dht-muted">{row.rank}</span></td>
+                <td className="dht-col--wallet"><WalletCell address={row.address} label={row.label} /></td>
                 <td><span className="dht-primary teal">{row.bought}</span></td>
                 <td><span className="dht-primary red">{row.sold}</span></td>
                 <td><span className="dht-primary">{row.trades}</span></td>
-                <td>
-                  <span className={`dht-primary ${row.pnlPos ? 'teal' : 'red'}`}>{row.pnl}</span>
-                </td>
+                <td><span className={`dht-primary ${row.pnlPos ? 'teal' : 'red'}`}>{row.pnl}</span></td>
               </tr>
             ))}
           </tbody>
@@ -96,6 +178,16 @@ function TradersTable() {
 }
 
 function PositionsTable() {
+  const { sorted, sortKey, sortDir, handleSort } = useSortedData(openPositions, {
+    side:   r => r.side,
+    amount: r => parseAmount(r.amount),
+    entry:  r => parseNum(r.entry),
+    pnl:    r => parseNum(r.pnl),
+    value:  r => parseNum(r.value),
+  })
+  const sh = (label, key) => (
+    <SortHeader label={label} colKey={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
   return (
     <>
       <div className="dht-toolbar"><FilterBtn /></div>
@@ -103,26 +195,24 @@ function PositionsTable() {
         <table className="dht-table">
           <thead>
             <tr>
-              <th>Wallet</th>
-              <th>Side</th>
-              <th>Amount</th>
-              <th>Entry</th>
-              <th>PnL</th>
-              <th>Value</th>
+              <th className="dht-col--wallet-first">Wallet</th>
+              <th>{sh('Side', 'side')}</th>
+              <th>{sh('Amount', 'amount')}</th>
+              <th>{sh('Entry', 'entry')}</th>
+              <th>{sh('PnL', 'pnl')}</th>
+              <th>{sh('Value', 'value')}</th>
             </tr>
           </thead>
           <tbody>
-            {openPositions.map((row, i) => (
+            {sorted.map((row, i) => (
               <tr key={i}>
-                <td><WalletCell address={row.address} label={row.label} /></td>
+                <td className="dht-col--wallet-first"><WalletCell address={row.address} label={row.label} /></td>
                 <td>
                   <span className={`dht-side-badge ${row.side}`}>{row.side.toUpperCase()}</span>
                 </td>
                 <td><span className="dht-primary">{row.amount}</span></td>
                 <td><span className="dht-primary">{row.entry}</span></td>
-                <td>
-                  <span className={`dht-primary ${row.pnlPos ? 'teal' : 'red'}`}>{row.pnl}</span>
-                </td>
+                <td><span className={`dht-primary ${row.pnlPos ? 'teal' : 'red'}`}>{row.pnl}</span></td>
                 <td><span className="dht-primary">{row.value}</span></td>
               </tr>
             ))}
@@ -134,25 +224,34 @@ function PositionsTable() {
 }
 
 function OrdersTable() {
+  const { sorted, sortKey, sortDir, handleSort } = useSortedData(openOrders, {
+    type:    r => r.type,
+    amount:  r => parseAmount(r.amount),
+    trigger: r => parseNum(r.trigger),
+    value:   r => parseNum(r.value),
+  })
+  const sh = (label, key) => (
+    <SortHeader label={label} colKey={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
   return (
     <div className="dht-wrapper">
       <table className="dht-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Type</th>
+            <th className="dht-col--rank">#</th>
+            <th className="dht-col--type">{sh('Type', 'type')}</th>
             <th>Label</th>
-            <th>Amount</th>
-            <th>Trigger</th>
-            <th>Value</th>
+            <th>{sh('Amount', 'amount')}</th>
+            <th>{sh('Trigger', 'trigger')}</th>
+            <th>{sh('Value', 'value')}</th>
             <th>Placed</th>
           </tr>
         </thead>
         <tbody>
-          {openOrders.map(row => (
+          {sorted.map(row => (
             <tr key={row.id}>
-              <td><span className="dht-muted">{row.id}</span></td>
-              <td>
+              <td className="dht-col--rank"><span className="dht-muted">{row.id}</span></td>
+              <td className="dht-col--type">
                 <span className={`dht-side-badge ${row.type}`}>{row.type.toUpperCase()}</span>
               </td>
               <td><span className="dht-primary">{row.label}</span></td>
@@ -169,6 +268,14 @@ function OrdersTable() {
 }
 
 function LiquidityTable() {
+  const { sorted, sortKey, sortDir, handleSort } = useSortedData(liquidityPools, {
+    share: r => parsePct(r.share),
+    fees:  r => parseNum(r.fees),
+    value: r => parseNum(r.value),
+  })
+  const sh = (label, key) => (
+    <SortHeader label={label} colKey={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
   return (
     <>
       <div className="dht-toolbar"><FilterBtn /></div>
@@ -176,20 +283,20 @@ function LiquidityTable() {
         <table className="dht-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Wallet</th>
+              <th className="dht-col--rank">#</th>
+              <th className="dht-col--wallet">Wallet</th>
               <th>Pool</th>
               <th>Pair</th>
-              <th>Share</th>
-              <th>Fees</th>
-              <th>Value</th>
+              <th>{sh('Share', 'share')}</th>
+              <th>{sh('Fees', 'fees')}</th>
+              <th>{sh('Value', 'value')}</th>
             </tr>
           </thead>
           <tbody>
-            {liquidityPools.map(row => (
+            {sorted.map(row => (
               <tr key={row.rank}>
-                <td><span className="dht-muted">{row.rank}</span></td>
-                <td><WalletCell address={row.address} label={row.label} /></td>
+                <td className="dht-col--rank"><span className="dht-muted">{row.rank}</span></td>
+                <td className="dht-col--wallet"><WalletCell address={row.address} label={row.label} /></td>
                 <td><span className="dht-primary">{row.pool}</span></td>
                 <td><span className="dht-primary">{row.pair}</span></td>
                 <td><span className="dht-primary">{row.share}</span></td>
@@ -205,24 +312,33 @@ function LiquidityTable() {
 }
 
 function DevTokensTable() {
+  const { sorted, sortKey, sortDir, handleSort } = useSortedData(devTokens, {
+    amount: r => parseNum(r.amount),
+    pct:    r => parsePct(r.pct),
+    value:  r => parseNum(r.value),
+    sold:   r => parsePct(r.sold),
+  })
+  const sh = (label, key) => (
+    <SortHeader label={label} colKey={key} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+  )
   return (
     <div className="dht-wrapper">
       <table className="dht-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Wallet</th>
-            <th>Amount</th>
-            <th>% Supply</th>
-            <th>Value</th>
-            <th>Sold</th>
+            <th className="dht-col--rank">#</th>
+            <th className="dht-col--wallet">Wallet</th>
+            <th>{sh('Amount', 'amount')}</th>
+            <th>{sh('% Supply', 'pct')}</th>
+            <th>{sh('Value', 'value')}</th>
+            <th>{sh('Sold', 'sold')}</th>
           </tr>
         </thead>
         <tbody>
-          {devTokens.map(row => (
+          {sorted.map(row => (
             <tr key={row.rank}>
-              <td><span className="dht-muted">{row.rank}</span></td>
-              <td><WalletCell address={row.address} label={row.label} /></td>
+              <td className="dht-col--rank"><span className="dht-muted">{row.rank}</span></td>
+              <td className="dht-col--wallet"><WalletCell address={row.address} label={row.label} /></td>
               <td><span className="dht-primary">{row.amount} AAVE</span></td>
               <td><span className="dht-primary">{row.pct}</span></td>
               <td><span className="dht-primary">{row.value}</span></td>
@@ -255,11 +371,11 @@ export default function TablesPanel() {
       </div>
 
       {activeTab === 'holders'   && <HoldersTable />}
-      {activeTab === 'traders'      && <TradersTable />}
-      {activeTab === 'positions'    && <PositionsTable />}
-      {activeTab === 'orders'       && <OrdersTable />}
-      {activeTab === 'lp'           && <LiquidityTable />}
-      {activeTab === 'dev'          && <DevTokensTable />}
+      {activeTab === 'traders'   && <TradersTable />}
+      {activeTab === 'positions' && <PositionsTable />}
+      {activeTab === 'orders'    && <OrdersTable />}
+      {activeTab === 'lp'        && <LiquidityTable />}
+      {activeTab === 'dev'       && <DevTokensTable />}
     </div>
   )
 }

@@ -15,15 +15,19 @@ export default {
 }
 
 export const BuyMode = {
-  args: { activeOp: 'buy', onOpChange: () => {}, onAdvClick: () => {}, symbol: 'AAVE' },
+  args: { activeOp: 'buy', onOpChange: () => {}, symbol: 'AAVE' },
 }
 
 export const SellMode = {
-  args: { activeOp: 'sell', onOpChange: () => {}, onAdvClick: () => {}, symbol: 'AAVE' },
+  args: { activeOp: 'sell', onOpChange: () => {}, symbol: 'AAVE' },
 }
 
 export const SwapMode = {
-  args: { activeOp: 'swap', onOpChange: () => {}, onAdvClick: () => {}, symbol: 'AAVE' },
+  args: { activeOp: 'swap', onOpChange: () => {}, symbol: 'AAVE' },
+}
+
+export const AutoMode = {
+  args: { activeOp: 'auto', onOpChange: () => {}, symbol: 'AAVE' },
 }
 
 export const Interactive = {
@@ -33,7 +37,6 @@ export const Interactive = {
       <TradingPanel
         activeOp={op}
         onOpChange={setOp}
-        onAdvClick={() => {}}
         symbol="AAVE"
       />
     )

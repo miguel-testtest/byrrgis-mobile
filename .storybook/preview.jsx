@@ -22,10 +22,11 @@ export const parameters = {
   layout: 'centered',
 }
 
-/** Wrap every story in MemoryRouter so hooks like useNavigate work */
+/** Wrap every story in MemoryRouter so hooks like useNavigate work.
+ *  Stories can set parameters.initialPath to control the active route. */
 export const decorators = [
-  (Story) => (
-    <MemoryRouter>
+  (Story, { parameters }) => (
+    <MemoryRouter initialEntries={[parameters.initialPath ?? '/']}>
       <Story />
     </MemoryRouter>
   ),
